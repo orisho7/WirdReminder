@@ -20,8 +20,9 @@ We've tried to make it as simple, privacy-focused, and beautiful as possible. It
 - **Sunnah Presets**: One-click setup for recommended readings (Al-Mulk before sleep, etc.).
 - **Privacy-First**: All your data—reminders, bookmarks, and history—stays strictly on your local machine.
 - **Offline Capable**: Works without an internet connection once the Quran text is cached.
+- **Firefox Port**: A dedicated version for Firefox users in the `/firefox` directory.
 
-## 🛠️ Technology Stack
+## 📖 Documentation
 
 This project is built with simplicity and performance in mind:
 - **Core**: Vanilla JavaScript (ES6+), HTML5, and CSS3.
@@ -44,7 +45,13 @@ If you are a developer or a tester, you can load the extension manually:
 3. **Enable Developer Mode**:
    Toggle the switch in the top-right corner.
 4. **Load Unpacked**:
-   Click the "Load unpacked" button and select the `WirdReminder` directory (the root folder containing `manifest.json`).
+   Click the "Load unpacked" button and select the `WirdReminder` root directory (containing the main `manifest.json`).
+
+### For Firefox:
+1. **Open Firefox Add-ons Settings**:
+   Navigate to `about:debugging#/runtime/this-firefox`.
+2. **Load Temporary Add-on**:
+   Click the "Load Temporary Add-on..." button and select the `manifest.json` file inside the `firefox/` directory.
 
 ## 🧪 How to Test
 

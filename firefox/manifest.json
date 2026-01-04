@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "الورد اليومي",
+  "version": "1.0.0",
+  "description": "مُذكِّر الوِرد - يساعدك على المداومة على ورد القرآن اليومي مع تذكيرات ذكية. مجاني، مفتوح المصدر، وبدون أي جمع بيانات.",
+  "permissions": [
+    "alarms",
+    "storage",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://api.quran.com/*"
+  ],
+  "background": {
+    "scripts": [
+      "src/lib/browser-polyfill.js",
+      "src/background/background.js"
+    ],
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "src/assets/icons/icon16.png",
+      "48": "src/assets/icons/icon48.png",
+      "128": "src/assets/icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "src/assets/icons/icon16.png",
+    "48": "src/assets/icons/icon48.png",
+    "128": "src/assets/icons/icon128.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "wird-reminder@hadealahmad.com",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
+  }
+}

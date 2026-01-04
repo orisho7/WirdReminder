@@ -1,0 +1,47 @@
+[
+    {
+        "id": "kahf_friday",
+        "name": "سورة الكهف",
+        "description": "قراءة سورة الكهف كل يوم جمعة",
+        "type": "surah",
+        "target": {
+            "surahId": 18
+        },
+        "timing": {
+            "frequency": "weekly",
+            "day": 5,
+            "time": "10:00"
+        },
+        "defaultEnabled": false
+    },
+    {
+        "id": "mulk_night",
+        "name": "سورة الملك",
+        "description": "قراءة سورة الملك كل ليلة",
+        "type": "surah",
+        "target": {
+            "surahId": 67
+        },
+        "timing": {
+            "frequency": "daily",
+            "time": "21:00"
+        },
+        "defaultEnabled": false
+    },
+    {
+        "id": "baqarah_ends",
+        "name": "خواتيم البقرة",
+        "description": "آخر آيتين من سورة البقرة قبل النوم",
+        "type": "ayah_range",
+        "target": {
+            "surahId": 2,
+            "startAyah": 285,
+            "endAyah": 286
+        },
+        "timing": {
+            "frequency": "daily",
+            "time": "22:00"
+        },
+        "defaultEnabled": false
+    }
+]
