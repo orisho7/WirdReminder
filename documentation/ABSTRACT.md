@@ -41,10 +41,12 @@ This script is the heart of the "Write Once" philosophy. It recursively copies t
 
 ### `scripts/build.js`
 The master orchestrator that:
-1.  Runs `sync.js` to ensure every platform has the latest core code.
-2.  Packages browser extensions into `.zip` artifacts.
-3.  Syncs Capacitor for Android and triggers the Gradle build.
-4.  Collects all final artifacts (ZIPs, APK, AAB) into a root `build/` folder.
+1.  Runs `version-sync.js` to align all manifests and adapters with the root `package.json`.
+2.  Runs `sync.js` to ensure every platform has the latest core code.
+3.  Packages browser extensions into `.zip` artifacts.
+4.  Syncs Capacitor for Android and triggers the Gradle build.
+5.  Patches Proguard for AGP 8.13+ compatibility.
+6.  Collects all final artifacts (ZIPs, APK, AAB) into a root `build/` folder.
 
 **Key Command:** `npm run build`
 
@@ -66,40 +68,84 @@ Handles the complex differences in background scheduling:
 - **Web**: Uses `setInterval` and `Desktop Notifications` for active sessions.
 
 ### Environment Context (`env.js`)
-A simple utility to detect the current platform:
+A simple utility to detect the current platform and provide the current version:
 ```javascript
 export const env = {
     isExtension: typeof chrome !== 'undefined' && !!chrome.runtime,
     isMobile: window.Capacitor?.isNative,
     isWeb: !window.Capacitor?.isNative && !isExtension,
+    version: '1.1.0' // Synced automatically
 };
 ```
 
 ---
 
-## 4. Minimal Platform-Specific Editing
+## 4. Cache Invalidation & Persistence
+
+When the application is updated, we must ensure the UI and metadata are refreshed without losing user bookmarks or reminders.
+
+### Service Worker Versioning (PWA/Android)
+The `CACHE_NAME` in `sw.js` is automatically updated to `wird-reminder-v{version}` during the build process. When the new Service Worker activates, it detects the name change and:
+1.  Purges all old asset caches.
+2.  Clears the `quran-api-cache` to force fresh data fetching.
+
+### Metadata Version Handshake
+In `app.js` and extension background scripts, a "Version Handshake" occurs on startup:
+1.  The app compares the current code version (`env.version`) with `last_app_version` in storage.
+2.  If they differ, it clears the `surah_metadata` (cached surah names/counts).
+3.  `user_reminders` and `read_history` are **preserved** as they are user-generated.
+
+---
+
+## 5. Mobile Specifics: Android (Capacitor)
+
+The Android app is a native shell around the PWA, enhanced by specific mobile behaviors.
+
+### Build & Testing
+- **JDK Support**: Fully compatible with **JDK 17, 21, and 25** (using Gradle 9.2.1).
+- **Testing**: Use `npm run android:refresh`. This command syncs the core, updates Capacitor web assets, and launches the app directly on a connected device or emulator.
+
+### Hardware Back Button Logic
+To provide a native feel, the hardware back button in `app.js` is intercepted via Capacitor:
+1.  **Context Aware**: If the Reader is open, it closes the reader first.
+2.  **Modal Management**: It dismisses open modals (Calendar, Delete, Alert) in order.
+3.  **Navigation**: If on a sub-tab, it returns to the main "Reminders" list.
+4.  **Double-Back to Exit**: If on the main screen, the user must tap "Back" twice within 2 seconds to exit the app.
+
+---
+
+## 6. Notification Handling Strategy
+
+### Extensions (Chrome/Firefox)
+Notifications are triggered by the **Service Worker (Background Script)** listening to `chrome.alarms`. This works even if the browser popup is closed.
+
+### Android (Capacitor)
+Uses the `@capacitor/local-notifications` plugin. Reminders are scheduled directly into the Android system alarm manager. Tapping a notification triggers the `localNotificationActionPerformed` listener, which opens the app and navigates directly to the specific `reminderId` in the Reader.
+
+### Web (PWA)
+Standard web notifications are used when the app is active. Due to browser limitations, persistent background alarms are less reliable than native/extension counterparts.
+
+---
+
+## 7. Minimal Platform-Specific Editing
 
 ### Extension Cross-Browser Bridge
 Firefox and Chrome share 99% of their code. To handle the `browser` vs `chrome` prefix difference without code duplication, we use a global `api` constant:
 
 ```javascript
-// In platform-specific popup.js or background.js
 const api = typeof browser !== 'undefined' ? browser : chrome;
-
-// Now use api.* globally
 api.runtime.onInstalled.addListener(...);
-api.alarms.create(...);
 ```
 
 ### Manifest Versioning
-Manifest files (`manifest.json` for extensions, `package.json` for web) are kept in sync automatically via `scripts/version-sync.js` so that the version number only needs to be updated once in the root `package.json`.
+Manifest files (`manifest.json` for extensions, `package.json` for web, and `build.gradle` for Android) are kept in sync automatically via `scripts/version-sync.js`.
 
 ---
 
-## 5. Summary of Development Workflow
+## 8. Summary of Development Workflow
 
-1.  **Modify Shared Logic**: Edit files in `core/`.
+1.  **Modify Shared Logic**: Edit files in root `/core/`.
 2.  **Sync**: Run `npm run sync`.
-3.  **Validate**: Test the Web version (`www/`) or load the Extension from the `chrome/src/` or `firefox/src/` folder.
-4.  **Build**: Run `npm run build` to generate all production-ready packages.
-5.  **Minimal Native Tweaks**: Only touch `/chrome`, `/firefox`, or `/android` for platform-specific configurations (like permissions or native UI hooks).
+3.  **Validate**: Test the Web version (`www/`) or run `npm run android:refresh` for mobile.
+4.  **Build**: Run `npm run build` to generate all production-ready packages for all platforms.
+5.  **Minimal Native Tweaks**: Only touch `/chrome`, `/firefox`, or `/android` for platform-specific configurations (like native permissions or Gradle setup).
