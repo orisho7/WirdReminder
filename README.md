@@ -1,6 +1,6 @@
 # مُذكِّر الوِرد اليومي - Wird Reminder
 
-A humble companion for your journey with the Holy Quran. **Wird Reminder** is a Chrome extension designed to help you maintain a consistent daily or weekly Quran reading habit through gentle reminders and a beautiful reading experience.
+A humble companion for your journey with the Holy Quran. **Wird Reminder** is a cross-platform application (Chrome, Firefox, PWA, and Android) designed to help you maintain a consistent daily or weekly Quran reading habit through gentle reminders and a beautiful reading experience.
 
 ---
 
@@ -12,73 +12,103 @@ We've tried to make it as simple, privacy-focused, and beautiful as possible. It
 
 ## ✨ Key Features
 
-- **Personalized Reminders**: Set reading goals for specific Surahs, Ayah ranges, or an entire Juz.
+- **Cross-Platform**: Available as a Browser Extension (Chrome/Firefox), a Progressive Web App (PWA), and a Native Android App.
+- **Personalized Reminders**: Set goals for specific Surahs, Ayah ranges, or an entire Juz.
 - **Smart Scheduling**: Choose between daily reminders or weekly sessions (like Surah Al-Kahf on Fridays).
 - **Beautiful Reader**: A focused, Mushaf-style reading view using the traditional Uthmani script.
 - **Progress Tracking**: A simple calendar view to visualize your consistency and history.
-- **Smart Bookmarking**: Remembers exactly where you left off in each wird.
-- **Sunnah Presets**: One-click setup for recommended readings (Al-Mulk before sleep, etc.).
+- **Smart Bookmarking**: Remembers exactly where you left off in each wird across your sessions.
 - **Privacy-First**: All your data—reminders, bookmarks, and history—stays strictly on your local machine.
 - **Offline Capable**: Works without an internet connection once the Quran text is cached.
-- **Firefox Port**: A dedicated version for Firefox users in the `/firefox` directory.
-
-## 📖 Documentation
-
-This project is built with simplicity and performance in mind:
-- **Core**: Vanilla JavaScript (ES6+), HTML5, and CSS3.
-- **Framework**: Chrome Manifest V3.
-- **API**: Powered by the wonderful [Quran.com API](https://quran.com/).
-- **Fonts**: Custom Uthmanic Hafs and SurahNames fonts for an authentic experience.
 
 ---
 
-## 🚀 Getting Started (Installation)
+## 🏗️ Multi-Platform Architecture
 
-If you are a developer or a tester, you can load the extension manually:
+This project uses a **"Write Once, Sync Everywhere"** architecture to maintain a unified codebase across all platforms.
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/your-repo/WirdReminder.git
-   ```
-2. **Open Chrome Extensions**:
-   Navigate to `chrome://extensions/` in your Google Chrome browser.
-3. **Enable Developer Mode**:
-   Toggle the switch in the top-right corner.
-4. **Load Unpacked**:
-   Click the "Load unpacked" button and select the `WirdReminder` root directory (containing the main `manifest.json`).
+### 1. The Core (`/core`)
+The **Single Source of Truth**. All business logic, CSS design systems, Quranic data, and UI components live here.
+- **`/core/js/adapter`**: Unified abstractions for Storage, Notifications, and Environment detection.
+- **`/core/js/logic`**: Core reminder and history management.
+- **`/core/js/renderer`**: The Mushaf-style rendering engine.
 
-### For Firefox:
-1. **Open Firefox Add-ons Settings**:
-   Navigate to `about:debugging#/runtime/this-firefox`.
-2. **Load Temporary Add-on**:
-   Click the "Load Temporary Add-on..." button and select the `manifest.json` file inside the `firefox/` directory.
-
-## 🧪 How to Test
-
-We recommend the following steps to verify the extension is working correctly:
-
-### 1. Manual Feature Testing
-- **Create a Reminder**: Open the popup, go to the "Add" tab, and create a reminder for a short Surah (e.g., Al-Ikhlas) for a time 1-2 minutes from now.
-- **Verify Notification**: Wait for the set time. A Chrome notification should appear.
-- **Test the Reader**: Click "اقرأ الآن" (Read Now) on the notification. The reader should open and display the correct verses.
-- **Mark as Read**: After reading, click the "Mark as Read" button. Verify the status updates in the popup list and calendar.
-- **Bookmark Check**: While reading, click on a word to set a bookmark. Close the tab and reopen it; the page should scroll back to your bookmark.
-
-### 2. Debugging Tools
-- **Background Processes**: Inspect the "Service Worker" from `chrome://extensions/` to see alarm logs.
-- **Storage**: Use the DevTools Console to check `chrome.storage.local.get(null, console.log)` to verify your data is being saved correctly.
-- **UI Responsiveness**: Right-click the popup and select "Inspect" to test the UI in different states.
+### 2. The Wrappers
+- **`/chrome` & `/firefox`**: Extension shells using Manifest V3/V2.
+- **`/www`**: The web host for the PWA and Capacitor.
+- **`/android`**: The native Android wrapper powered by Capacitor.
 
 ---
 
-## 🏗️ Architecture Overview
+## 🚀 Development Workflow
 
-The project follows a modular architecture:
-- **`src/background/`**: Handles the alarms and notification lifecycle.
-- **`src/popup/`**: The main management interface for reminders and settings.
-- **`src/reader/`**: A coordinator-based reading engine that fetches, parses, and renders Quranic text.
-- **`src/styles/`**: A design system built using CSS variables for high flexibility and consistency.
+To ensure changes are propagated correctly across all platforms, follow this workflow:
+
+### 1. Setup
+```bash
+git clone https://github.com/hadealahmad/WirdReminder.git
+npm install
+```
+
+### 2. Modifying Code
+**NEVER** edit files inside `chrome/src/core`, `firefox/src/core`, or `www/core` directly. These are generated copies. Always edit the files in the root **`/core`** directory.
+
+### 3. Synchronizing Changes
+After making changes to the core or assets, run:
+```bash
+npm run sync
+```
+This script propagates your core changes to all platform-specific source directories.
+
+### 4. Building Artifacts
+To generate production-ready packages for all platforms:
+```bash
+npm run build
+```
+This will create a `/build` directory containing:
+- Chrome & Firefox Extension Zips
+- Android APK (Debug)
+- Android AAB (Release)
+
+---
+
+## 🧪 Testing Guidelines
+
+### Extension Testing
+1. Run `npm run sync`.
+2. **Chrome**: Load `chrome/` (unpacked) via `chrome://extensions`.
+3. **Firefox**: Load `firefox/manifest.json` via `about:debugging`.
+
+### Web/PWA Testing
+1. Run `npm run sync`.
+2. Serve the `www/` directory using any local server (e.g., `npx serve www`).
+
+### Android Testing
+1. Ensure `ANDROID_HOME` is set.
+2. Run:
+```bash
+npm run android:refresh
+```
+This will sync the latest web code into the Android project and launch it on your connected device/emulator.
+
+---
+
+## 🛠️ Updating Guidelines
+
+### 1. Versioning
+We use `scripts/version-sync.js`. To update the project version:
+1. Update `"version"` in the root `package.json`.
+2. Run `npm run build` (or just `npm version <new_version>`). The script will automatically update all manifest files (`chrome`, `firefox`, `www`, `capacitor.config`).
+
+### 2. Platform Adapters
+When adding new platform-specific features (like a new storage engine), update the adapters in `core/js/adapter/`. This ensures the logic remains identical while the implementation adapts to the environment.
+
+### 3. Dependencies
+- **Android**: Requires **JDK 17, 21, or 25**.
+- **Build Tools**: Uses Gradle 9.2.1 and AGP 8.13.0.
+
+---
 
 ## 🤝 Contribution
 
-We welcome any humble contributions to this project. Whether it's a bug fix, a new feature, or an improvement to the Arabic translations, feel free to open a Pull Request.
+We welcome any humble contributions to this project. Whether it's a bug fix, a new feature, or an improvement to the Arabic translations, feel free to open a Pull Request. Always ensure your changes are made in the `/core` directory and that you've run `npm run sync` before submitting.
