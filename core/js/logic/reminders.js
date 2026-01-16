@@ -133,25 +133,89 @@ export async function toggleReminder(id, enabled) {
 }
 
 /**
- * Marks a reminder as read
+ * Marks a reminder as read (only if not already marked in current period)
  * @param {string|number} reminderId 
  * @param {string} reminderName 
+ * @param {Object} reminder - Optional, full reminder object for period checking
  */
-export async function addReadMark(reminderId, reminderName) {
+export async function addReadMark(reminderId, reminderName, reminder = null) {
     const history = await storage.get('read_history') || [];
+
+    // Check if already marked in current period
+    const existingMarks = history.filter(h => h.reminderId === reminderId);
+    if (existingMarks.length > 0 && reminder) {
+        const lastMark = existingMarks[existingMarks.length - 1];
+        if (isReadInCurrentPeriod(reminder, lastMark.timestamp)) {
+            // Already marked in this period, don't add duplicate
+            return false;
+        }
+    }
+
     history.push({ reminderId, reminderName, timestamp: Date.now() });
     await storage.set({ read_history: history.slice(-1000) });
+    return true;
 }
 
 /**
- * Removes the most recent read mark
+ * Removes all read marks for this reminder in the current period
  * @param {string|number} reminderId 
+ * @param {Object} reminder - Optional, full reminder for period-aware removal
  */
-export async function removeReadMark(reminderId) {
+export async function removeReadMark(reminderId, reminder = null) {
     const history = await storage.get('read_history') || [];
-    const lastIndex = history.map(h => h.reminderId).lastIndexOf(reminderId);
-    if (lastIndex !== -1) {
-        history.splice(lastIndex, 1);
-        await storage.set({ read_history: history });
+
+    if (reminder) {
+        // Remove all marks for this reminder that fall within the current period
+        const now = Date.now();
+        const timing = reminder.timing;
+
+        // Calculate period start time
+        let periodStart = 0;
+        if (timing) {
+            const [hours, minutes] = (timing.time || '00:00').split(':').map(Number);
+            const nowDate = new Date(now);
+
+            if (timing.frequency === 'daily') {
+                const resetTime = new Date(nowDate);
+                resetTime.setHours(hours, minutes, 0, 0);
+                if (nowDate < resetTime) {
+                    resetTime.setDate(resetTime.getDate() - 1);
+                }
+                periodStart = resetTime.getTime();
+            } else if (timing.frequency === 'weekly') {
+                const scheduledDay = timing.day ?? 5;
+                const resetTime = new Date(nowDate);
+                resetTime.setHours(hours, minutes, 0, 0);
+
+                const currentDay = nowDate.getDay();
+                let daysDiff = currentDay - scheduledDay;
+                if (daysDiff < 0) daysDiff += 7;
+                if (daysDiff === 0 && nowDate < resetTime) {
+                    daysDiff = 7;
+                }
+                resetTime.setDate(resetTime.getDate() - daysDiff);
+                periodStart = resetTime.getTime();
+            } else {
+                periodStart = now - 24 * 60 * 60 * 1000;
+            }
+        } else {
+            periodStart = now - 24 * 60 * 60 * 1000; // Default: last 24 hours
+        }
+
+        // Filter out all marks for this reminder within the current period
+        const filteredHistory = history.filter(h => {
+            if (h.reminderId !== reminderId) return true;
+            return h.timestamp < periodStart;
+        });
+
+        await storage.set({ read_history: filteredHistory });
+    } else {
+        // Fallback: remove just the last entry (legacy behavior)
+        const lastIndex = history.map(h => h.reminderId).lastIndexOf(reminderId);
+        if (lastIndex !== -1) {
+            history.splice(lastIndex, 1);
+            await storage.set({ read_history: history });
+        }
     }
 }
+

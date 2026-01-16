@@ -388,9 +388,9 @@ function createReminderCard(reminder, lastReadTs, isActive, hasBookmark = false)
             const isCurrentlyChecked = checkbox.getAttribute('aria-checked') === 'true';
 
             if (isCurrentlyChecked) {
-                await removeReadMark(reminder.id);
+                await removeReadMark(reminder.id, reminder);
             } else {
-                await addReadMark(reminder.id, reminder.name || reminder.description);
+                await addReadMark(reminder.id, reminder.name || reminder.description, reminder);
             }
 
             await loadAllReminders();
@@ -457,12 +457,42 @@ async function openReader(reminder) {
         currentReminder = null;
     };
 
-    // Mark as read button
-    document.getElementById('mark-read-btn').onclick = async () => {
-        await addReadMark(reminder.id, reminder.name || reminder.description);
+    // Mark as read/unread button - with state tracking
+    const markReadBtn = document.getElementById('mark-read-btn');
+    await updateMarkReadButton(reminder, markReadBtn);
+
+    markReadBtn.onclick = async () => {
+        const read_history = await storage.get('read_history') || [];
+        const attempts = read_history.filter(h => h.reminderId === reminder.id);
+        const lastReadTs = attempts.length > 0 ? attempts[attempts.length - 1].timestamp : null;
+        const isCurrentlyRead = isReadInCurrentPeriod(reminder, lastReadTs);
+
+        if (isCurrentlyRead) {
+            await removeReadMark(reminder.id, reminder);
+        } else {
+            await addReadMark(reminder.id, reminder.name || reminder.description, reminder);
+        }
+
         await loadAllReminders();
-        showAlert('تم', 'تم تحديد الورد كمقروء ✓');
+        await updateMarkReadButton(reminder, markReadBtn);
     };
+}
+
+async function updateMarkReadButton(reminder, btn) {
+    const read_history = await storage.get('read_history') || [];
+    const attempts = read_history.filter(h => h.reminderId === reminder.id);
+    const lastReadTs = attempts.length > 0 ? attempts[attempts.length - 1].timestamp : null;
+    const isRead = isReadInCurrentPeriod(reminder, lastReadTs);
+
+    if (isRead) {
+        btn.textContent = '✗ إلغاء القراءة';
+        btn.style.backgroundColor = 'hsl(var(--muted))';
+        btn.style.color = 'hsl(var(--foreground))';
+    } else {
+        btn.textContent = '✓ تحديد كمقروء';
+        btn.style.backgroundColor = 'hsl(var(--quran-green))';
+        btn.style.color = 'white';
+    }
 }
 
 function renderReaderContent(pagesData) {
@@ -495,10 +525,20 @@ function renderReaderContent(pagesData) {
                         span.dataset.verseKey = word.verse_key;
                         span.dataset.wordPosition = word.position;
 
-                        span.addEventListener('click', () => {
+                        span.addEventListener('click', async () => {
+                            const isCurrentBookmark = span.classList.contains('bookmarked');
+
+                            // Remove highlight from all words first
                             readerContent.querySelectorAll('.mushaf-word.bookmarked').forEach(w => w.classList.remove('bookmarked'));
-                            span.classList.add('bookmarked');
-                            saveBookmark(word.verse_key, word.position);
+
+                            if (isCurrentBookmark) {
+                                // Toggle off - remove bookmark
+                                await removeBookmark();
+                            } else {
+                                // Set new bookmark
+                                span.classList.add('bookmarked');
+                                await saveBookmark(word.verse_key, word.position);
+                            }
                         });
                     }
 
@@ -542,6 +582,13 @@ async function saveBookmark(verseKey, wordPosition) {
     if (!currentReminder) return;
     const bookmarks = await storage.get('bookmarks') || {};
     bookmarks[currentReminder.id] = { verseKey, wordPosition, timestamp: Date.now() };
+    await storage.set({ 'bookmarks': bookmarks });
+}
+
+async function removeBookmark() {
+    if (!currentReminder) return;
+    const bookmarks = await storage.get('bookmarks') || {};
+    delete bookmarks[currentReminder.id];
     await storage.set({ 'bookmarks': bookmarks });
 }
 
