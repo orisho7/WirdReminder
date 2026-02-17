@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>مذكّر الورد اليومي - Wird Reminder</title>
+    <meta name="description"
+        content="إضافة مجانية للمتصفح تساعدك على المحافظة على ورد القرآن الكريم يومياً بتذكيرات ذكية وقارئ مصحف جميل.">
+
+    <!-- Same fonts as the extension -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="core/assets/icons/icon48.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#10b981">
+    <link rel="apple-touch-icon" href="core/assets/icons/icon128.png">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav landing-only">
+        <div class="nav-content">
+            <a href="#" class="nav-logo">
+                <img src="core/assets/icons/icon48.png" alt="Wird Logo">
+                <span>مذكّر الورد اليومي</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">المميزات</a></li>
+                <li><a href="#screenshots">لقطات</a></li>
+                <li><a href="#demo">جرّب</a></li>
+                <li><a href="#download">تحميل</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero landing-only">
+        <span class="hero-badge">🕌 مجاني ومفتوح المصدر</span>
+        <h1>رفيقك اليومي مع القرآن الكريم</h1>
+        <p class="hero-description">
+            إضافة أنيقة للمتصفح تساعدك على المحافظة على وردك القرآني بتذكيرات ذكية وقارئ مصحف جميل
+        </p>
+        <div class="hero-cta">
+            <a href="#demo" class="btn btn-primary btn-lg">📖 جرّب الآن</a>
+            <a href="#download" class="btn btn-outline btn-lg">⬇️ تحميل</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features landing-only">
+        <div class="features-grid">
+            <div class="feature-item">
+                <span class="feature-emoji">🔔</span>
+                <span>تذكيرات ذكية</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-emoji">📖</span>
+                <span>خط عثماني</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-emoji">📅</span>
+                <span>متابعة الإنجاز</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-emoji">🔖</span>
+                <span>علامات مرجعية</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-emoji">🔒</span>
+                <span>خصوصية تامة</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-emoji">⚡</span>
+                <span>تذكيرات السنن</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Showcase Section -->
+    <section id="screenshots" class="screenshots landing-only">
+        <div class="screenshots-header">
+            <h2>لقطات من الإضافة</h2>
+            <p>تعرّف على واجهة الإضافة الأنيقة والبسيطة</p>
+        </div>
+        <div class="screenshots-gallery">
+            <div class="screenshot-item">
+                <img src="./core/assets/screenshots/list.png" alt="قائمة التذكيرات">
+                <span class="screenshot-label">قائمة التذكيرات</span>
+            </div>
+            <div class="screenshot-item">
+                <img src="./core/assets/screenshots/reader.png" alt="قارئ المصحف">
+                <span class="screenshot-label">قارئ المصحف</span>
+            </div>
+            <div class="screenshot-item">
+                <img src="./core/assets/screenshots/add.png" alt="إضافة تذكير">
+                <span class="screenshot-label">إضافة تذكير</span>
+            </div>
+            <div class="screenshot-item">
+                <img src="./core/assets/screenshots/calendar.png" alt="تقويم الإنجاز">
+                <span class="screenshot-label">تقويم الإنجاز</span>
+            </div>
+            <div class="screenshot-item">
+                <img src="./core/assets/screenshots/settings.png" alt="الإعدادات">
+                <span class="screenshot-label">الإعدادات</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="demo">
+        <div class="demo-header">
+            <h2>جرّب الإضافة الكاملة</h2>
+            <p>تجربة تفاعلية كاملة - بدون تثبيت</p>
+        </div>
+
+        <!-- Phone Frame Container -->
+        <div class="phone-frame-wrapper">
+            <div class="phone-frame">
+                <div class="phone-notch"></div>
+
+                <!-- Extension App Container (Same structure as popup.html) -->
+                <div class="app-container" id="app-container">
+                    <!-- Header -->
+                    <header>
+                        <div class="logo-area">
+                            <img src="core/assets/icons/icon48.png" alt="Wird Logo">
+                            <h1>مُذكِّر الوِرد اليومي</h1>
+                        </div>
+                    </header>
+
+                    <!-- Tabs (Same as extension) -->
+                    <div class="tabs-nav">
+                        <button class="tab-trigger active" data-tab="reminders-tab">التذكيرات</button>
+                        <button class="tab-trigger" data-tab="add-new">إضافة جديد</button>
+                        <button class="tab-trigger" data-tab="settings-tab">الإعدادات</button>
+                        <button class="tab-trigger" id="pwa-downloads-trigger" data-tab="downloads-tab"
+                            style="display: none;">التحميل</button>
+                    </div>
+
+                    <!-- Content -->
+                    <main class="content">
+                        <!-- Tab: Reminders -->
+                        <section id="reminders-tab" class="tab-content active">
+                            <h2 class="section-title">قائمتي</h2>
+                            <div id="my-reminders-list">
+                                <!-- Populated by JS -->
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <h2 class="section-title">تذكيرات السنن</h2>
+                            <div id="presets-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </section>
+
+                        <!-- Tab: Add New -->
+                        <section id="add-new" class="tab-content">
+                            <form id="add-reminder-form">
+                                <input type="hidden" id="edit-id" value="">
+
+                                <div class="form-item">
+                                    <label class="label">نوع التذكير</label>
+                                    <select id="reminder-type" class="input">
+                                        <option value="surah">سورة كاملة</option>
+                                        <option value="ayah_range">آيات محددة</option>
+                                        <option value="juz">جزء من القرآن</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-item">
+                                    <label class="label">اختر الهدف</label>
+                                    <select id="target-select" class="input">
+                                        <option value="" disabled selected>جاري التحميل...</option>
+                                    </select>
+                                </div>
+
+                                <div id="ayah-range-group" style="display:none;" class="form-item">
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <div style="flex: 1;">
+                                            <label class="label" style="font-size: 0.7rem;">من آية</label>
+                                            <input type="number" id="start-ayah" class="input" placeholder="1" min="1">
+                                        </div>
+                                        <div style="flex: 1;">
+                                            <label class="label" style="font-size: 0.7rem;">إلى آية</label>
+                                            <input type="number" id="end-ayah" class="input" placeholder="5" min="1">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-item">
+                                    <label class="label">اسم التذكير</label>
+                                    <input type="text" id="reminder-name" placeholder="مثال: ورد الفجر" class="input">
+                                </div>
+
+                                <div style="display: flex; gap: 0.75rem;" class="form-item">
+                                    <div style="flex: 1.5;">
+                                        <label class="label">التكرار</label>
+                                        <select id="frequency" class="input">
+                                            <option value="daily">يومياً</option>
+                                            <option value="weekly">أسبوعياً</option>
+                                        </select>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <label class="label">الوقت</label>
+                                        <input type="time" id="time-select" class="input" value="08:00">
+                                    </div>
+                                </div>
+
+                                <div class="form-item" id="day-select-group" style="display:none;">
+                                    <label class="label">اليوم</label>
+                                    <select id="day-select" class="input">
+                                        <option value="5">الجمعة</option>
+                                        <option value="6">السبت</option>
+                                        <option value="0">الأحد</option>
+                                        <option value="1">الاثنين</option>
+                                        <option value="2">الثلاثاء</option>
+                                        <option value="3">الأربعاء</option>
+                                        <option value="4">الخميس</option>
+                                    </select>
+                                </div>
+
+                                <div class="submit-area">
+                                    <button type="submit" id="submit-btn" class="btn btn-primary btn-xl">حفظ
+                                        التذكير</button>
+                                    <button type="button" id="cancel-edit-btn" class="btn btn-outline btn-xl"
+                                        style="display:none; margin-top:0.5rem;">إلغاء التعديل</button>
+                                </div>
+                            </form>
+                        </section>
+
+                        <!-- Tab: Settings -->
+                        <section id="settings-tab" class="tab-content">
+                            <h2 class="section-title">النسخ الاحتياطي</h2>
+                            <div class="settings-group">
+                                <p class="settings-description">يمكنك تصدير بياناتك لحفظها أو نقلها إلى جهاز آخر.
+                                </p>
+                                <button id="export-data" class="btn btn-primary btn-xl">
+                                    📤 تصدير البيانات
+                                </button>
+                                <button id="import-data" class="btn btn-outline btn-xl">
+                                    📥 استيراد البيانات
+                                </button>
+                                <input type="file" id="import-file-input" accept=".json" style="display:none;">
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <h2 class="section-title">إدارة البيانات</h2>
+                            <div class="settings-group">
+                                <p class="settings-description">حذف سجل الإنجاز فقط مع الاحتفاظ بالتذكيرات.</p>
+                                <button id="clear-history" class="btn btn-outline btn-xl">
+                                    🗑️ مسح سجل الإنجاز
+                                </button>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <h2 class="section-title" style="color: hsl(var(--destructive));">منطقة الخطر</h2>
+                            <div class="settings-group danger-zone">
+                                <p class="settings-description">إعادة ضبط الإضافة بالكامل وحذف جميع البيانات.</p>
+                                <button id="reset-extension" class="btn btn-xl"
+                                    style="background-color: hsl(var(--destructive)); color: white;">
+                                    ⚠️ إعادة ضبط الإضافة
+                                </button>
+                            </div>
+                        </section>
+
+                        <!-- Tab: Downloads (PWA specific) -->
+                        <section id="downloads-tab" class="tab-content">
+                            <h2 class="section-title">حمّل الإضافة والتطبيق</h2>
+                            <p class="settings-description">احصل على التجربة الكاملة مع الإشعارات المجدولة على جميع
+                                أجهزتك.</p>
+
+                            <div class="downloads-list"
+                                style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+                                <a href="https://chromewebstore.google.com/detail/%D8%A7%D9%84%D9%88%D8%B1%D8%AF-%D8%A7%D9%84%D9%8A%D9%88%D9%85%D9%8A/pgogfohfgohkfpfifdojhmladlaeceok"
+                                    target="_blank" class="download-btn-mini">
+                                    <span class="browser-icon">🌐</span>
+                                    <div class="download-text">
+                                        <span class="browser-name">Chrome Extension</span>
+                                        <span class="browser-desc">إضافة متصفح كروم</span>
+                                    </div>
+                                </a>
+                                <a href="https://addons.mozilla.org/en-US/firefox/addon/%D8%A7%D9%84%D9%88%D8%B1%D8%AF-%D8%A7%D9%84%D9%8A%D9%88%D9%85%D9%8A/"
+                                    target="_blank" class="download-btn-mini">
+                                    <span class="browser-icon">🦊</span>
+                                    <div class="download-text">
+                                        <span class="browser-name">Firefox Add-on</span>
+                                        <span class="browser-desc">إضافة متصفح فايرفوكس</span>
+                                    </div>
+                                </a>
+                                <a href="#" target="_blank" class="download-btn-mini">
+                                    <span class="browser-icon">📱</span>
+                                    <div class="download-text">
+                                        <span class="browser-name">Android App</span>
+                                        <span class="browser-desc">تطبيق الأندرويد (قريباً)</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </section>
+                    </main>
+                </div>
+
+                <!-- Reader View (Hidden by default) -->
+                <div class="reader-view" id="reader-view" style="display:none;">
+                    <div class="reader-header">
+                        <button class="back-btn" id="back-btn">← العودة</button>
+                        <span id="reader-title">سورة الفاتحة</span>
+                    </div>
+                    <div class="reader-content" id="reader-content">
+                        <!-- Verses rendered here -->
+                    </div>
+                    <div class="reader-footer">
+                        <button class="btn btn-primary btn-xl" id="mark-read-btn">✓ تحديد كمقروء</button>
+                    </div>
+                </div>
+            </div>
+
+            <p class="demo-note">
+                💡 هذه نسخة تجريبية كاملة. للحصول على <strong>الإشعارات والتذكيرات المجدولة</strong>، حمّل الإضافة
+                الكاملة.
+            </p>
+        </div>
+    </section>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3 class="modal-title">تأكيد الحذف</h3>
+            <p class="modal-description">هل أنت متأكد من رغبتك في حذف هذا التذكير؟ لا يمكن التراجع عن هذه الخطوة.
+            </p>
+            <div class="modal-footer">
+                <button id="cancel-delete" class="btn btn-outline">إلغاء</button>
+                <button id="confirm-delete" class="btn btn-primary"
+                    style="background-color: hsl(var(--destructive));">حذف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div id="alert-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3 id="alert-title" class="modal-title">تنبيه</h3>
+            <p id="alert-message" class="modal-description"></p>
+            <div class="modal-footer">
+                <button id="alert-ok" class="btn btn-primary">موافق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar Modal -->
+    <div id="calendar-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content calendar-modal">
+            <div class="calendar-header">
+                <button id="calendar-prev" class="btn btn-ghost calendar-nav">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+                <h3 id="calendar-title" class="modal-title"></h3>
+                <button id="calendar-next" class="btn btn-ghost calendar-nav">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+            <div id="calendar-reminder-name" class="calendar-reminder-name"></div>
+            <div class="calendar-weekdays">
+                <span>أحد</span>
+                <span>اثن</span>
+                <span>ثلث</span>
+                <span>أربع</span>
+                <span>خمس</span>
+                <span>جمع</span>
+                <span>سبت</span>
+            </div>
+            <div id="calendar-grid" class="calendar-grid"></div>
+            <div class="calendar-legend">
+                <div class="legend-item">
+                    <span class="legend-icon completed">✓</span>
+                    <span>مُنجز</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-icon missed"></span>
+                    <span>غير مُنجز</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="calendar-close" class="btn btn-primary btn-xl">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footnote/Download -->
+    <section id="download" class="download landing-only">
+        <h2>حمّل الإضافة الكاملة</h2>
+        <p class="download-subtitle">احصل على الإشعارات المجدولة والتذكيرات الذكية</p>
+
+        <div class="download-buttons">
+            <a href="https://chromewebstore.google.com/detail/%D8%A7%D9%84%D9%88%D8%B1%D8%AF-%D8%A7%D9%84%D9%8A%D9%88%D9%85%D9%8A/pgogfohfgohkfpfifdojhmladlaeceok"
+                class="download-btn">
+                <span class="browser-icon">🌐</span>
+                <span class="browser-name">Chrome</span>
+            </a>
+            <a href="https://addons.mozilla.org/en-US/firefox/addon/%D8%A7%D9%84%D9%88%D8%B1%D8%AF-%D8%A7%D9%84%D9%8A%D9%88%D9%85%D9%8A/"
+                class="download-btn">
+                <span class="browser-icon">🦊</span>
+                <span class="browser-name">Firefox</span>
+            </a>
+        </div>
+
+        <div class="download-extra">
+            <span>🔓 مفتوح المصدر على</span>
+            <a href="https://github.com/your-repo/WirdReminder" target="_blank">GitHub</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer landing-only">
+        <p>صُنع بـ ❤️ لخدمة كتاب الله | بيانات القرآن من <a href="https://quran.com" target="_blank">Quran.com</a>
+        </p>
+    </footer>
+
+    <!-- App Script -->
+    <script src="app.js" type="module"></script>
+
+    <!-- SW Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registered', reg))
+                    .catch(err => console.log('Service Worker NOT registered', err));
+            });
+        }
+    </script>
+</body>
+
+</html>
