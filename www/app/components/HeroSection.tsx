@@ -27,7 +27,7 @@ export function HeroSection() {
             initial={{ opacity: 0, x: i18n.language === 'ar' ? 30 : -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-center lg:text-right rtl:lg:text-right ltr:lg:text-left"
+            className="text-center lg:text-start"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100/50 rounded-full mb-6">
               <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
@@ -57,7 +57,7 @@ export function HeroSection() {
                       alt="Chrome" 
                       className="w-8 h-8"
                     />
-                    <div className="text-right rtl:text-right ltr:text-left">
+                    <div className="text-start">
                       <div className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mb-0.5">{t('download.safe_desc')}</div>
                       <div className="text-lg font-bold text-gray-900 dark:text-white leading-tight">{t('common.chrome')}</div>
                     </div>
@@ -70,7 +70,7 @@ export function HeroSection() {
                       alt="Firefox" 
                       className="w-8 h-8"
                     />
-                    <div className="text-right rtl:text-right ltr:text-left">
+                    <div className="text-start">
                       <div className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider mb-0.5">{t('download.safe_desc')}</div>
                       <div className="text-lg font-bold text-gray-900 dark:text-white leading-tight">{t('common.firefox')}</div>
                     </div>
@@ -145,7 +145,7 @@ export function HeroSection() {
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-10 -right-4 z-50 bg-white dark:bg-gray-900 rounded-2xl p-4 shadow-xl border border-gray-100 dark:border-gray-800"
+              className="absolute top-10 -end-4 z-50 bg-white dark:bg-gray-900 rounded-2xl p-4 shadow-xl border border-gray-100 dark:border-gray-800"
             >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">

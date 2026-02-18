@@ -34,6 +34,28 @@
     --input-gap: 1rem;
     --header-padding: 1rem 1.25rem;
     --tabs-margin: 1rem 1.25rem 0.5rem;
+
+    /* Shadows (token-first) */
+    --shadow-sm: 0 1px 2px hsl(var(--foreground) / 0.06);
+    --shadow-md: 0 10px 20px hsl(var(--foreground) / 0.12);
+    --shadow-lg: 0 20px 25px hsl(var(--foreground) / 0.12), 0 10px 10px hsl(var(--foreground) / 0.06);
+
+    /* Overlay (modal) */
+    --overlay: 222.2 84% 4.9%;
+
+    /* Motion */
+    --dur-fast: 150ms;
+    --dur: 200ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Spacing tiny (calendar gap) */
+    --space-1: 0.25rem; /* 4px */
+    --space-2: 0.5rem;  /* 8px */
+
+    --space-3: 0.75rem; /* 12px */
+    --space-4: 1rem;    /* 16px */
+    --space-5: 1.5rem;  /* 24px */
+
 }
 
 * {

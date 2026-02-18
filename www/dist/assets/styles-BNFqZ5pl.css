@@ -990,3 +990,33 @@ header h1 {
         width: 200px;
     }
 }
+
+
+.lang-switcher {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.lang-btn {
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: hsl(var(--muted-foreground));
+  transition: all 0.2s;
+}
+
+.lang-btn:hover {
+  border-color: hsl(var(--quran-green));
+  color: hsl(var(--foreground));
+}
+
+.lang-btn.active {
+  background-color: hsl(var(--quran-green));
+  border-color: hsl(var(--quran-green));
+  color: white;
+}

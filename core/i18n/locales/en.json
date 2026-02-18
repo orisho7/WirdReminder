@@ -1,0 +1,177 @@
+{
+  "app": {
+    "name": "Daily Wird Reminder",
+    "logoAlt": "Wird Logo"
+  },
+  "nav": {
+    "name": "Daily Wird Reminder",
+    "features": "Features",
+    "screenshots": "Screenshots",
+    "try": "Try",
+    "download": "Download"
+  },
+  "hero": {
+    "badge": "🕌 Free & Open Source",
+    "title": "Your Daily Companion with the Holy Quran",
+    "subtitle": "An elegant browser extension that helps you maintain your daily Quran reading with smart reminders and a beautiful Mushaf reader.",
+    "ctaTry": "📖 Try Now",
+    "ctaDownload": "⬇️ Download"
+  },
+  "features": {
+    "title": "Features",
+    "items": {
+      "smartReminders": "Smart Reminders",
+      "uthmaniFont": "Uthmani Script",
+      "progressTracking": "Progress Tracking",
+      "bookmarks": "Bookmarks",
+      "fullPrivacy": "Full Privacy",
+      "sunnahReminders": "Sunnah Reminders"
+    }
+  },
+  "screenshots": {
+    "title": "Extension Screenshots",
+    "subtitle": "Explore the clean and elegant interface of the extension",
+    "items": {
+      "remindersList": "Reminders List",
+      "mushafReader": "Mushaf Reader",
+      "addReminder": "Add Reminder",
+      "progressCalendar": "Progress Calendar",
+      "settings": "Settings"
+    }
+  },
+  "demo": {
+    "title": "Try the Full Extension",
+    "subtitle": "A complete interactive experience — no installation required",
+    "card": {
+      "title": "Daily Wird Reminder",
+      "tabReminders": "Reminders",
+      "tabAddNew": "Add New",
+      "tabSettings": "Settings",
+      "tabDownload": "Download",
+      "myList": "My List",
+      "emptyState": "No active reminders at the moment."
+    },
+    "sections": {
+      "sunnahReminders": "Sunnah Reminders"
+    },
+    "reminders": {
+      "alKahf": {
+        "title": "Surah Al-Kahf",
+        "schedule": "10:00 AM - Weekly (Friday)"
+      },
+      "alMulk": {
+        "title": "Surah Al-Mulk",
+        "schedule": "9:00 PM - Daily"
+      },
+      "kawatimAlBaqarah": {
+        "title": "Last Verses of Al-Baqarah",
+        "schedule": "10:00 PM - Daily"
+      }
+    },
+    "notice": "💡 This is a full demo version. To receive scheduled notifications and reminders, download the full extension.",
+    "ctaDownloadFull": "Download the Full Extension"
+  },
+  "download": {
+    "title": "Download the Full Extension",
+    "subtitle": "Get scheduled notifications and smart reminders",
+    "browsers": {
+      "chrome": "Chrome",
+      "firefox": "Firefox"
+    },
+    "openSource": "🔓 Open Source on"
+  },
+  "footer": {
+    "credits": "Made with ❤️ to serve the Book of Allah | Quran data from",
+    "quranLink": "Quran.com"
+  },
+  "alert": {
+    "title": "Alert"
+  },
+  "frequency": {
+    "preset": "Preset",
+    "daily": "Daily",
+    "weekly": "Weekly"
+  },
+  "form": {
+    "reminderType": "Reminder Type",
+    "types": {
+      "surah": "Full Surah",
+      "ayahRange": "Specific Verses",
+      "juz": "Juz from Quran"
+    },
+    "selectTarget": "Select Target",
+    "selectSurah": "Select Surah",
+    "selectJuz": "Select Juz",
+    "loading": "Loading...",
+    "fromAyah": "From Ayah",
+    "toAyah": "To Ayah",
+    "reminderName": "Reminder Name",
+    "namePlaceholder": "Example: Fajr Wird",
+    "frequency": "Frequency",
+    "time": "Time",
+    "day": "Day",
+    "save": "Save Reminder",
+    "cancelEdit": "Cancel Edit"
+  },
+  "days": {
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday"
+  },
+  "settings": {
+    "backup": "Backup",
+    "backupDesc": "You can export your data to save it or transfer it to another device.",
+    "export": "📤 Export Data",
+    "import": "📥 Import Data",
+    "dataManagement": "Data Management",
+    "clearHistoryDesc": "Delete progress history only while keeping reminders.",
+    "clearHistory": "🗑️ Clear Progress History",
+    "dangerZone": "Danger Zone",
+    "resetDesc": "Reset the extension completely and delete all data.",
+    "reset": "⚠️ Reset Extension"
+  },
+  "downloads": {
+    "title": "Download Extension & App",
+    "desc": "Get the full experience with scheduled notifications on all your devices.",
+    "chromeDesc": "Chrome Browser Extension",
+    "firefoxDesc": "Firefox Browser Add-on",
+    "androidDesc": "Android App (Coming Soon)"
+  },
+  "reader": {
+    "back": "← Back",
+    "markRead": "✓ Mark as Read"
+  },
+  "modal": {
+    "deleteTitle": "Confirm Delete",
+    "deleteDesc": "Are you sure you want to delete this reminder? This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "ok": "OK"
+  },
+  "calendar": {
+    "sun": "Sun",
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "completed": "Completed",
+    "missed": "Missed",
+    "close": "Close"
+  },
+  "card": {
+    "notScheduled": "Not Scheduled",
+    "bookmarkTitle": "You have a saved bookmark",
+    "read": "Read",
+    "unread": "Unread",
+    "progressHistory": "Progress History",
+    "readBtn": "Read",
+    "edit": "Edit",
+    "delete": "Delete"
+  }
+}

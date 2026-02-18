@@ -242,9 +242,14 @@ i18n
   });
 
 // Handle direction
-i18n.on('languageChanged', (lng) => {
+const updateDocAttributes = (lng: string) => {
   document.documentElement.dir = lng === 'ar' ? 'rtl' : 'ltr';
   document.documentElement.lang = lng;
-});
+};
+
+i18n.on('languageChanged', updateDocAttributes);
+
+// Set initial direction
+updateDocAttributes(i18n.language);
 
 export default i18n;

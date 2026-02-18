@@ -129,7 +129,6 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Tajawal', 'Amiri', sans-serif;
-    direction: rtl;
   }
 
   /* Hide scrollbar for screenshots carousel */

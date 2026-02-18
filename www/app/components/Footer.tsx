@@ -8,10 +8,10 @@ export function Footer() {
   return (
     <footer className="bg-gray-900 dark:bg-gray-950 text-white py-16 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 rtl:text-right ltr:text-left">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 text-start">
           {/* Brand */}
             <div>
-              <div className="flex items-center gap-3 mb-4 ltr:justify-start rtl:justify-start">
+              <div className="flex items-center gap-3 mb-4 justify-start">
                 <img src="assets/icons/icon48.png" alt="Wird Logo" className="w-10 h-10 rounded-xl" />
                 <span className="text-xl font-bold">{t('nav.brand')}</span>
               </div>

@@ -55,7 +55,7 @@ export function ScreenshotsSection() {
         </motion.div>
         
         <div className="relative overflow-hidden">
-          <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide rtl:dir-rtl ltr:dir-ltr">
+          <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide">
             {screenshots.map((screenshot, index) => (
               <motion.div
                 key={index}
@@ -81,8 +81,8 @@ export function ScreenshotsSection() {
           </div>
           
           {/* Gradient Overlays for scroll indication */}
-          <div className="absolute right-0 top-0 bottom-8 w-20 bg-gradient-to-l from-emerald-50/30 to-transparent dark:from-gray-950 pointer-events-none" />
-          <div className="absolute left-0 top-0 bottom-8 w-20 bg-gradient-to-r from-emerald-50/30 to-transparent dark:from-gray-950 pointer-events-none" />
+          <div className="absolute end-0 top-0 bottom-8 w-20 bg-gradient-to-s from-emerald-50/30 to-transparent dark:from-gray-950 pointer-events-none rtl:bg-gradient-to-l ltr:bg-gradient-to-l" />
+          <div className="absolute start-0 top-0 bottom-8 w-20 bg-gradient-to-s from-emerald-50/30 to-transparent dark:from-gray-950 pointer-events-none rtl:bg-gradient-to-r ltr:bg-gradient-to-r" />
         </div>
       </div>
     </section>
