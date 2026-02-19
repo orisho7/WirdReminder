@@ -48,9 +48,10 @@
 }
 
 body.is-app {
-    height: auto;
+    height: 100vh;
+    height: 100svh;
     width: 100%;
-    overflow-x: hidden;
+    overflow: hidden; /* Prevent viewport scroll */
     background-color: hsl(var(--background));
     font-family: 'Inter', 'Tajawal', sans-serif;
     direction: rtl;
@@ -70,9 +71,10 @@ body.is-app .reader-view {
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
     position: relative;
-    padding-top: 28px;
-    /* For phone notch */
+    padding-top: env(safe-area-inset-top, 28px);
+    overflow: hidden; /* Ensure flex children control their own scrolling */
 }
 
 .app-container header {
@@ -101,45 +103,95 @@ header h1 {
     height: 24px;
 }
 
-/* Tabs - EXACT copy from extension */
+/* Tabs - Modern Bottom Navbar */
 .tabs-nav {
-    display: inline-flex;
-    height: 2.75rem;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius);
-    background-color: hsl(var(--muted));
-    padding: 0.25rem;
-    margin: var(--tabs-margin);
-    width: calc(100% - 2.5rem);
+    display: none; /* We use .bottom-tabs which overrides or replaces this */
+}
+
+/* Bottom Navbar Styles */
+.bottom-tabs {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: calc(4.5rem + env(safe-area-inset-bottom));
+  display: flex !important;
+  align-items: center;
+  justify-content: space-around;
+  background-color: hsla(var(--background), 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid hsl(var(--border));
+  padding-bottom: env(safe-area-inset-bottom);
+  margin: 0;
+  z-index: 100;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Adjust main content to not be covered by fixed navbar */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--container-padding);
+  padding-bottom: 6rem; /* Space for navbar */
 }
 
 .tab-trigger {
-    display: inline-flex;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 0.4rem;
     white-space: nowrap;
-    border-radius: calc(var(--radius) - 2px);
-    padding: 0.45rem 1rem;
-    font-size: 0.875rem;
+    padding: 0.25rem;
+    font-size: 0.75rem;
     font-weight: 500;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     border: none;
     background: transparent;
     color: hsl(var(--muted-foreground));
     flex: 1;
     font-family: inherit;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.tab-trigger:hover {
-    color: hsl(var(--foreground));
+.tab-trigger svg,
+.tab-trigger i {
+    width: 22px;
+    height: 22px;
+    padding: 2px;
+    border-radius: 1.25rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .tab-trigger.active {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    color: hsl(var(--quran-green));
+    font-weight: 700;
+}
+
+.tab-trigger.active svg,
+.tab-trigger.active i {
+    background-color: hsla(var(--quran-green), 0.15);
+    color: hsl(var(--quran-green));
+    stroke: hsl(var(--quran-green));
+    padding: 4px 12px;
+    width: 48px; /* Pill width */
+    height: 28px;
+    font-size: 1.1rem;
+}
+
+.tab-trigger span {
+    transition: transform 0.2s ease;
+}
+
+.tab-trigger.active span {
+    transform: scale(1.05);
 }
 
 .content {

@@ -9,7 +9,7 @@ export function HeroSection() {
   return (
     <section className="relative pt-32 pb-24 px-6 overflow-hidden bg-gradient-to-b from-emerald-50/30 to-white dark:bg-gray-950 dark:bg-none">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div 
           className="absolute inset-0" 
           style={{
@@ -48,9 +48,9 @@ export function HeroSection() {
               {t('hero.description')}
             </p>
             
-            <div className="flex flex-col gap-6 items-center lg:items-start">
+            <div className="flex flex-col gap-6 items-center lg:items-start relative z-20">
               <div className="flex flex-wrap gap-4 justify-center lg:justify-start w-full">
-                <a href={t('common.chrome_url')} target="_blank" className="w-full sm:w-auto">
+                <a href={t('common.chrome_url')} target="_blank" className="w-full sm:w-auto relative z-30">
                   <Button variant="outline" className="border-2 border-gray-200 dark:border-gray-800 hover:border-red-500 dark:hover:border-red-900 rounded-2xl px-6 py-8 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all dark:text-white w-full flex items-center gap-4 shadow-lg hover:shadow-red-500/20">
                     <img 
                       src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%28February_2022%29.svg" 
@@ -63,7 +63,7 @@ export function HeroSection() {
                     </div>
                   </Button>
                 </a>
-                <a href={t('common.firefox_url')} target="_blank" className="w-full sm:w-auto">
+                <a href={t('common.firefox_url')} target="_blank" className="w-full sm:w-auto relative z-30">
                   <Button variant="outline" className="border-2 border-gray-200 dark:border-gray-800 hover:border-orange-500 dark:hover:border-orange-900 rounded-2xl px-6 py-8 hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-all dark:text-white w-full flex items-center gap-4 shadow-lg hover:shadow-orange-500/20">
                     <img 
                       src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Firefox_logo%2C_2019.svg" 

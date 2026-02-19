@@ -107,6 +107,7 @@ export const notificationManager = {
                         minute: minutes
                     },
                     allowWhileIdle: true
+                    
                 };
             } else {
                 // Daily notification
