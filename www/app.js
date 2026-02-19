@@ -1072,7 +1072,11 @@ function startEditing(reminder) {
   submitBtn.textContent = "تعديل التذكير";
   cancelEditBtn.style.display = "block";
 
-  if (tabs[1]) tabs[1].textContent = "تعديل الورد";
+  if (tabs[1]) {
+    document.getElementById("add-new-btn").textContent = "تعديل الورد";
+    document.getElementById("add-new-icon").style.display = "none";
+    document.getElementById("edit-new-icon").style.display = "block";
+  }
 
   document.getElementById("reminder-type").value = reminder.type || "surah";
   document.getElementById("reminder-name").value = reminder.name || "";
@@ -1114,7 +1118,11 @@ function resetForm() {
   submitBtn.textContent = "حفظ التذكير";
   cancelEditBtn.style.display = "none";
 
-  if (tabs[1]) tabs[1].textContent = "إضافة جديد";
+  if (tabs[1]) {
+    document.getElementById("add-new-btn").textContent = "إضافة جديد";
+    document.getElementById("add-new-icon").style.display = "block";
+    document.getElementById("edit-new-icon").style.display = "none";
+  }
 
   addForm.reset();
   document.getElementById("reminder-type").dispatchEvent(new Event("change"));
