@@ -2,6 +2,8 @@ import { storage } from '../core/js/adapter/storage.js';
 import { fetchAllSurahs, getSurahName } from '../core/js/api.js';
 import * as reminderLogic from '../core/js/logic/reminders.js';
 import { notificationManager } from '../core/js/adapter/notifications.js';
+import { ReflectionStorage } from '../core/js/adapter/storage.js';
+import { filterReflections, sortReflections } from '../core/js/logic/reflections.js'
 
 // Define cross-browser API
 const api = typeof browser !== 'undefined' ? browser : chrome;
@@ -55,8 +57,9 @@ async function loadPresetsData() {
 function initTabs() {
     console.log('Initializing tabs...', tabs.length);
     tabs.forEach((tab, index) => {
-        tab.addEventListener('click', () => {
+        tab.addEventListener('click', async () => {
             console.log('Tab clicked:', tab.dataset.tab);
+
             tabs.forEach(t => t.classList.remove('active'));
             tabContents.forEach(c => c.classList.remove('active'));
 
@@ -70,6 +73,10 @@ function initTabs() {
             // If switching AWAY from add-new while editing, reset form
             if (target !== 'add-new' && editIdInput?.value) {
                 resetForm();
+            }
+
+            if (target === 'reflections-tab') {
+                await loadReflectionsJournal();
             }
         });
     });
@@ -1012,3 +1019,72 @@ function showConfirmModal(title, message, onConfirm) {
         }
     };
 }
+
+async function loadReflectionsJournal(filter = '') {
+    const listContainer = document.getElementById('reflections-journal-list');
+    const reflections = await ReflectionStorage.getAll();
+
+    const sorted = sortReflections(reflections, "date");
+    const filtered = filterReflections(sorted, filter);
+
+    if (filtered.length === 0) {
+        listContainer.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">📝</div>
+                <div class="empty-state-text">${filter ? 'لا توجد نتائج' : 'سجل تدبرك فارغ'}</div>
+            </div>`;
+        return;
+    }
+
+    listContainer.innerHTML = '';
+
+    for (const ref of filtered) {
+        const surahName = await getSurahName(parseInt(ref.surah));
+        const card = document.createElement('div');
+
+        card.className = 'reminder-card reflection-card';
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="reflection-info-wrapper">
+                    <div class="card-title">سورة ${surahName}</div>
+                    <div class="card-description">آية رقم ${ref.ayah}</div>
+                </div>
+                <button class="btn btn-ghost btn-destructive delete-ref" title="حذف">حذف</button>
+            </div>
+            <div class="reflection-body">
+                <p class="reflection-text">${ref.text}</p>
+            </div>
+            <div class="card-actions">
+                <span class="card-description">${new Date(ref.updatedAt).toLocaleDateString('en-US')}</span>
+                <div class="btn-group">
+                    <button class="btn btn-outline" style="height: 1.5rem; font-size: 0.7rem;">انتقل للمصحف ←</button>
+                </div>
+            </div>
+        `;
+
+        const openInMushaf = () => {
+            const url = api.runtime.getURL(`src/reader/reader.html?surahId=${ref.surah}&targetAyah=${ref.ayah}`);
+            api.tabs.create({ url });
+        };
+        card.querySelector('.btn-group').onclick = openInMushaf;
+
+        card.querySelector('.delete-ref').onclick = (e) => {
+            e.stopPropagation();
+
+            showConfirmModal(
+                'حذف تدبر',
+                `هل متأكد من حذف تدبر الآية ${ref.ayah} من سورة ${surahName}؟`,
+                async () => {
+                    await ReflectionStorage.delete(ref.surah, ref.ayah);
+                    await loadReflectionsJournal(filter);
+                }
+            );
+        };
+
+        listContainer.appendChild(card);
+    }
+}
+
+document.getElementById('ref-search').addEventListener('input', (e) => {
+    loadReflectionsJournal(e.target.value);
+});

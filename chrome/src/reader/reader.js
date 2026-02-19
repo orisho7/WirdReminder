@@ -6,18 +6,25 @@ import * as reminderLogic from '../core/js/logic/reminders.js';
 import { ReflectionStorage } from '../core/js/adapter/storage.js';
 
 let currentReminderId = null;
+let targetAyahKey = null; // For scrolling to ayah
 
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     currentReminderId = params.get('reminderId');
+
+    const surahId = params.get('surahId');
+    const targetAyah = params.get('targetAyah');
+
     const container = document.getElementById('content-area');
 
-    if (!currentReminderId) {
-        showError('لم يتم تحديد الورد', container);
-        return;
+    if (currentReminderId) {
+        await loadReminderContent(currentReminderId, container);
+    } else if (surahId) {
+        targetAyahKey = `${surahId}:${targetAyah}`;
+        await loadReflectionContext(surahId, container);
+    } else {
+        showError('لم يُحدد محتوى للعرض', container);
     }
-
-    await loadReminderContent(currentReminderId, container);
 });
 
 /**
@@ -60,7 +67,7 @@ function setupInteractionHandlers(container) {
             const wordPosition = wordEl.dataset.wordPosition;
 
             const isCurrentlyBookmarked = wordEl.classList.contains('bookmarked');
-            
+
             container.querySelectorAll('.mushaf-word.bookmarked').forEach(el => {
                 el.classList.remove('bookmarked');
             });
@@ -85,7 +92,7 @@ function setupInteractionHandlers(container) {
 
 async function openReflectionModal(surah, ayah, container) {
     const existing = await ReflectionStorage.getByAyah(surah, ayah);
-    
+
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
     overlay.innerHTML = `
@@ -119,7 +126,7 @@ async function openReflectionModal(surah, ayah, container) {
             await ReflectionStorage.delete(surah, ayah);
         }
         overlay.remove();
-        await decorateReflections(container); 
+        await decorateReflections(container);
     };
 
     overlay.querySelector('#close-ref').onclick = () => overlay.remove();
@@ -333,3 +340,48 @@ async function restoreBookmark(container) {
     }
 }
 
+async function loadReflectionContext(surahId, container) {
+    try {
+        await renderSurah(surahId, container);
+        
+        setupInteractionHandlers(container);
+        await decorateReflections(container);
+
+        if (targetAyahKey) {
+            scrollToTargetAyah(container);
+        }
+    } catch (e) {
+        console.error(e);
+        showError('حدث خطأ أثناء تحميل السورة', container);
+    }
+}
+
+function scrollToTargetAyah(container) {
+    setTimeout(() => {
+        const ayahSymbol = container.querySelector(`.ayah-symbol[data-verse-key="${targetAyahKey}"]`);
+        
+        if (ayahSymbol) {
+            ayahSymbol.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            const parentPage = ayahSymbol.closest('.mushaf-page');
+            if (parentPage) {
+                const words = parentPage.querySelectorAll(`.mushaf-word[data-verse-key="${targetAyahKey}"]`);
+                
+                words.forEach(w => {
+                    w.dataset.originalColor = w.style.color || ''; 
+                    
+                    w.style.transition = 'color 0.5s ease';
+                    w.style.color = 'var(--primary-color)'; 
+                    w.style.fontWeight = 'bold';
+                });
+                
+                setTimeout(() => {
+                    words.forEach(w => {
+                        w.style.color = w.dataset.originalColor;
+                        w.style.fontWeight = 'normal';
+                    });
+                }, 3000);
+            }
+        }
+    }, 500);
+}

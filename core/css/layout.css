@@ -28,15 +28,16 @@ header h1 {
 
 /* Tabs - Shadcn style */
 .tabs-nav {
-    display: inline-flex;
+    display: flex;
     height: 2.75rem;
     align-items: center;
-    justify-content: center;
     border-radius: var(--radius);
     background-color: hsl(var(--muted));
     padding: 0.25rem;
     margin: var(--tabs-margin);
-    width: calc(100% - 2.5rem);
+    width: calc(100% - 1.5rem);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .tab-trigger {
@@ -45,8 +46,8 @@ header h1 {
     justify-content: center;
     white-space: nowrap;
     border-radius: calc(var(--radius) - 2px);
-    padding: 0.45rem 1rem;
-    font-size: 0.875rem;
+    padding: 0.45rem 0.25rem; 
+    font-size: 0.75rem;
     font-weight: 500;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
