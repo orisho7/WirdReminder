@@ -4,6 +4,7 @@ import * as reminderLogic from '../core/js/logic/reminders.js';
 import { notificationManager } from '../core/js/adapter/notifications.js';
 import { ReflectionStorage } from '../core/js/adapter/storage.js';
 import { filterReflections, sortReflections } from '../core/js/logic/reflections.js'
+import { themeManager } from '../core/js/theme.js';
 
 // Define cross-browser API
 const api = typeof browser !== 'undefined' ? browser : chrome;
@@ -31,6 +32,13 @@ const alertOkBtn = document.getElementById('alert-ok');
 
 // Init
 document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize theme toggle
+    const themeToggleContainer = document.getElementById('theme-toggle-container');
+    if (themeToggleContainer) {
+        const toggleButton = themeManager.createToggleButton();
+        themeToggleContainer.appendChild(toggleButton);
+    }
+
     await loadPresetsData();
     initTabs();
     await loadAllReminders();
