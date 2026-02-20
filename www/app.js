@@ -708,15 +708,39 @@ function renderReaderContent(pagesData, fullLineInfoMap) {
                     const gap = nextLine - i;
 
                     if (surahId && gap === 2) {
+                        const introDiv = document.createElement('div');
+                        introDiv.className = 'surah-intro';
                         const header = document.createElement('div');
                         header.className = 'surah-header';
                         header.innerHTML = `<span>surah</span><span>${String(surahId).padStart(3, '0')}</span>`;
-                        pageDiv.appendChild(header);
+                        introDiv.appendChild(header);
+                        // Check if next empty line (i+1) is basmala
+                        const nextI = i + 1;
+                        if (nextI <= 15 && !lines.has(nextI)) {
+                            let nextNext = nextI;
+                            while (nextNext <= 15 && !lines.has(nextNext)) nextNext++;
+                            const nextSurahId = surahStarts[nextNext];
+                            if (nextSurahId && (nextNext - nextI) === 1 && nextSurahId !== '9') {
+                                const basmala = document.createElement('div');
+                                basmala.className = 'basmala';
+                                basmala.textContent = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ';
+                                introDiv.appendChild(basmala);
+                            }
+                        }
+                        pageDiv.appendChild(introDiv);
                     } else if (surahId && gap === 1 && surahId !== '9') {
-                        const basmala = document.createElement('div');
-                        basmala.className = 'basmala';
-                        basmala.textContent = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ';
-                        pageDiv.appendChild(basmala);
+                        // Only add if not already added by previous gap===2
+                        const prevIntro = pageDiv.querySelector('.surah-intro:last-child');
+                        const alreadyAdded = prevIntro && prevIntro.querySelector('.basmala');
+                        if (!alreadyAdded) {
+                            const introDiv = document.createElement('div');
+                            introDiv.className = 'surah-intro';
+                            const basmala = document.createElement('div');
+                            basmala.className = 'basmala';
+                            basmala.textContent = 'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ';
+                            introDiv.appendChild(basmala);
+                            pageDiv.appendChild(introDiv);
+                        }
                     }
                 }
             }
