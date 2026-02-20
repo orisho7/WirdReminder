@@ -115,3 +115,61 @@ export function findSurahGap(currentLine, lines, surahStarts) {
 
     return { gap: 0, surahId: null };
 }
+
+/**
+ * Builds a map of line_number → { totalWords, firstPos, lastPos }
+ * from the full page's verse data.
+ * @param {Array} fullPageVerses - All verses on the page from API
+ * @returns {Map<number, {totalWords: number, firstPos: number, lastPos: number}>}
+ */
+export function buildFullLineInfo(fullPageVerses) {
+    const lineInfo = new Map();
+
+    fullPageVerses.forEach(verse => {
+        verse.words.forEach(word => {
+            const ln = word.line_number;
+            if (!lineInfo.has(ln)) {
+                lineInfo.set(ln, { totalWords: 0, firstPos: Infinity, lastPos: -1 });
+            }
+            const info = lineInfo.get(ln);
+            info.totalWords++;
+            info.firstPos = Math.min(info.firstPos, word.position);
+            info.lastPos = Math.max(info.lastPos, word.position);
+        });
+    });
+
+    return lineInfo;
+}
+
+/**
+ * Determines the partial-line type for a wird's line compared to the full Mushaf line.
+ * @param {Array} wirdWords - The wird's words on this line
+ * @param {Object} fullInfo - { totalWords, firstPos, lastPos } from buildFullLineInfo
+ * @returns {'full'|'partial-start'|'partial-end'|'partial-both'}
+ *   In RTL context:
+ *   - 'full': line is complete, justify edge-to-edge
+ *   - 'partial-start': words don't start at the beginning of the Mushaf line (gap on right in RTL)
+ *   - 'partial-end': words don't reach the end of the Mushaf line (gap on left in RTL)
+ *   - 'partial-both': gaps on both sides
+ */
+export function getPartialLineType(wirdWords, fullInfo) {
+    if (!fullInfo || wirdWords.length >= fullInfo.totalWords) {
+        return 'full';
+    }
+
+    // Find first and last position in the wird's words for this line
+    let wirdFirstPos = Infinity;
+    let wirdLastPos = -1;
+    wirdWords.forEach(w => {
+        wirdFirstPos = Math.min(wirdFirstPos, w.position);
+        wirdLastPos = Math.max(wirdLastPos, w.position);
+    });
+
+    const missingStart = wirdFirstPos > fullInfo.firstPos;
+    const missingEnd = wirdLastPos < fullInfo.lastPos;
+
+    if (missingStart && missingEnd) return 'partial-both';
+    if (missingStart) return 'partial-start';
+    if (missingEnd) return 'partial-end';
+    return 'full';
+}

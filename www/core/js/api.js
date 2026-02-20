@@ -51,6 +51,19 @@ export async function fetchJuzVerses(juzId) {
 }
 
 /**
+ * Fetches all verses on a given Mushaf page
+ * Used to get full line context for partial-line detection
+ * @param {number} pageNumber - The Mushaf page number
+ * @returns {Promise<Array>} Array of verse objects on that page
+ */
+export async function fetchPageVerses(pageNumber) {
+    const url = `${BASE_API}/verses/by_page/${pageNumber}?words=true&word_fields=${WORD_FIELDS}&per_page=1000`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.verses;
+}
+
+/**
  * Fetches all surahs metadata
  * @returns {Promise<Array>} Array of surah metadata
  */

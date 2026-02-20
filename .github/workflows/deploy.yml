@@ -38,12 +38,14 @@ jobs:
         run: npm ci
 
       - name: Build/Sync
-        run: npm run sync
+        run: |
+          npm run sync
+          npm run build:web
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'www'
+          path: 'www/dist'
       
       - name: Deploy to GitHub Pages
         id: deployment

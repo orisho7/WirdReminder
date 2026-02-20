@@ -1,16 +1,12 @@
 /* ===========================================================================
-   WIRD REMINDER LANDING PAGE
-   Uses the EXACT same styles as the extension for consistency
+   WIRD REMINDER - LEGACY STYLES (App & Extension Only)
    =========================================================================== */
 
-/* Import the same fonts as the extension */
+/* Import fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap');
 
-/* ===========================================================================
-   CSS VARIABLES - Copied directly from extension's base.css
-   =========================================================================== */
+/* CSS VARIABLES */
 :root {
-    /* Shadcn Colors (Light Theme - same as extension) */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -31,11 +27,7 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
-
-    /* Semantic Colors */
     --quran-green: 142.1 76.2% 36.3%;
-
-    /* Semantic Spacing */
     --container-padding: 1.25rem;
     --section-gap: 1.5rem;
     --card-padding: 1rem;
@@ -45,448 +37,25 @@
     --tabs-margin: 1rem 1.25rem 0.5rem;
 }
 
-/* ===========================================================================
-   FONT FACES
-   =========================================================================== */
-@font-face {
-    font-family: 'UthmanicHafs';
-    src: url('core/assets/fonts/UthmanicHafs.woff2') format('woff2');
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'SurahNames';
-    src: url('core/assets/fonts/SurahNames.woff2') format('woff2');
-    font-display: swap;
-}
-
-/* ===========================================================================
-   BASE RESET
-   =========================================================================== */
-* {
+/* Base Resets */
+/* Extension context resets - scoped to app containers */
+.app-container *, 
+#reader-view *, 
+.modal-overlay * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: 'Inter', 'Tajawal', sans-serif;
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    -webkit-font-smoothing: antialiased;
-    direction: rtl;
-    line-height: 1.5;
-}
-
-/* ===========================================================================
-   NAVIGATION (Landing Page Only)
-   =========================================================================== */
-.nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: hsl(var(--background) / 0.95);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid hsl(var(--border));
-    height: 56px;
-}
-
-.nav-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 var(--container-padding);
-}
-
-.nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: hsl(var(--foreground));
-    text-decoration: none;
-}
-
-.nav-logo img {
-    width: 28px;
-    height: 28px;
-}
-
-.nav-links {
-    display: flex;
-    gap: 1.5rem;
-    list-style: none;
-}
-
-.nav-links a {
-    color: hsl(var(--muted-foreground));
-    font-size: 0.875rem;
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-.nav-links a:hover {
-    color: hsl(var(--foreground));
-}
-
-/* ===========================================================================
-   HERO SECTION
-   =========================================================================== */
-.hero {
-    padding: 100px var(--container-padding) 48px;
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.hero-badge {
-    display: inline-block;
-    padding: 0.375rem 0.75rem;
-    background-color: hsl(var(--quran-green) / 0.1);
-    border: 1px solid hsl(var(--quran-green) / 0.3);
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    color: hsl(var(--quran-green));
-    margin-bottom: 1.25rem;
-}
-
-.hero h1 {
-    font-size: 2.25rem;
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    color: hsl(var(--foreground));
-    margin-bottom: 0.75rem;
-}
-
-.hero-description {
-    font-size: 1rem;
-    color: hsl(var(--muted-foreground));
-    margin-bottom: 1.5rem;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.hero-cta {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: center;
-}
-
-/* ===========================================================================
-   FEATURES SECTION
-   =========================================================================== */
-.features {
-    padding: 2rem var(--container-padding);
-    background-color: hsl(var(--muted));
-}
-
-.features-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.75rem;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.feature-item {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 0.75rem;
-    background-color: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
-    border-radius: var(--radius);
-    font-size: 0.8rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
-
-.feature-emoji {
-    font-size: 1rem;
-}
-
-/* ===========================================================================
-   SCREENSHOTS SHOWCASE SECTION
-   =========================================================================== */
-.screenshots {
-    padding: 3rem var(--container-padding);
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.screenshots-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.screenshots-header h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    margin-bottom: 0.25rem;
-}
-
-.screenshots-header p {
-    color: hsl(var(--muted-foreground));
-    font-size: 0.875rem;
-}
-
-.screenshots-gallery {
-    display: flex;
-    gap: 1.5rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding: 1rem 0.5rem;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--border)) transparent;
-}
-
-.screenshots-gallery::-webkit-scrollbar {
-    height: 8px;
-}
-
-.screenshots-gallery::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.screenshots-gallery::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--border));
-    border-radius: 4px;
-}
-
-.screenshot-item {
-    flex: 0 0 auto;
-    scroll-snap-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    transition: transform 0.3s ease;
-}
-
-.screenshot-item:hover {
-    transform: translateY(-4px);
-}
-
-.screenshot-item img {
-    width: 280px;
-    height: auto;
-    border-radius: 12px;
-    border: 1px solid hsl(var(--border));
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 10px -5px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.3s ease;
-}
-
-.screenshot-item:hover img {
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 8px 20px -8px rgba(0, 0, 0, 0.1);
-}
-
-.screenshot-label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: hsl(var(--muted-foreground));
-    background-color: hsl(var(--muted));
-    padding: 0.375rem 0.75rem;
-    border-radius: 9999px;
-}
-
-/* Center gallery on larger screens */
-@media (min-width: 1100px) {
-    .screenshots-gallery {
-        justify-content: center;
-        overflow-x: visible;
-    }
-}
-
-/* ===========================================================================
-   DEMO SECTION WITH PHONE FRAME
-   =========================================================================== */
-.demo {
-    padding: 3rem var(--container-padding);
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.demo-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.demo-header h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    margin-bottom: 0.25rem;
-}
-
-.demo-header p {
-    color: hsl(var(--muted-foreground));
-    font-size: 0.875rem;
-}
-
-.phone-frame-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.phone-frame {
-    width: 380px;
-    height: 600px;
-    background-color: hsl(var(--background));
-    border: 1px solid hsl(var(--border));
-    border-radius: 24px;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-.phone-notch {
-    position: absolute;
-    top: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70px;
-    height: 20px;
-    background: hsl(var(--muted));
-    border-radius: 10px;
-    z-index: 10;
-}
-
-.demo-note {
-    margin-top: 1.5rem;
-    font-size: 0.8rem;
-    color: hsl(var(--muted-foreground));
-    text-align: center;
-    max-width: 400px;
-}
-
-/* Mini Download Buttons for PWA Tab */
-.download-btn-mini {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    background-color: hsl(var(--muted));
-    border: 1px solid hsl(var(--border));
-    border-radius: var(--radius);
-    text-decoration: none;
-    color: hsl(var(--foreground));
-    transition: all 0.2s ease;
-}
-
-.download-btn-mini:hover {
-    background-color: hsl(var(--accent));
-    transform: translateX(-4px);
-}
-
-.download-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.download-text .browser-name {
-    font-size: 0.875rem;
-    font-weight: 600;
-}
-
-.download-text .browser-desc {
-    font-size: 0.75rem;
-    color: hsl(var(--muted-foreground));
-}
-
-/* ===========================================================================
-   APP MODE (For Android / Installed PWA)
-   =========================================================================== */
 body.is-app {
-    height: auto;
-    width: 100%;
-    overflow-x: hidden;
-    background-color: hsl(var(--background));
-}
-
-body.is-app .landing-only {
-    display: none;
-}
-
-/* Hide demo header and note on mobile/app mode */
-body.is-app .demo-header,
-body.is-app .demo-note {
-    display: none;
-}
-
-body.is-app .demo {
-    padding: 0;
-    max-width: 100%;
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-body.is-app .phone-frame-wrapper {
-    width: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-body.is-app .phone-frame {
-    width: 100%;
-    height: 100%;
-    flex: 1;
-    border-radius: 0;
-    border: none;
-    box-shadow: none;
-}
-
-body.is-app .phone-notch {
-    display: none;
-}
-
-body.is-app .app-container {
-    padding-top: 0;
     height: 100vh;
     height: 100svh;
-}
-
-/* Safe Area Insets for Mobile */
-@supports (padding: env(safe-area-inset-top)) {
-    body.is-app .app-container {
-        padding-top: env(safe-area-inset-top);
-        padding-bottom: env(safe-area-inset-bottom);
-    }
-}
-
-/* Reader View Overrides for App Mode */
-body.is-app .reader-view {
-    padding-top: 0;
-}
-
-body.is-app .reader-header {
-    background-color: white;
-}
-
-@supports (padding: env(safe-area-inset-top)) {
-    body.is-app .reader-view {
-        padding-top: env(safe-area-inset-top);
-    }
-
-    body.is-app .reader-footer {
-        padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
-    }
+    width: 100%;
+    overflow: hidden; /* Prevent viewport scroll */
+    background-color: hsl(var(--background));
+    font-family: 'Inter', 'Tajawal', sans-serif;
+    direction: rtl;
+    line-height: 1.5;
 }
 
 body.is-app .app-container,
@@ -496,19 +65,19 @@ body.is-app .reader-view {
 }
 
 /* ===========================================================================
-   EXTENSION APP CONTAINER (Inside Phone Frame)
-   Uses EXACT extension styles from layout.css
+   EXTENSION APP UI
    =========================================================================== */
 .app-container {
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
     position: relative;
-    padding-top: 28px;
-    /* For phone notch */
+    padding-top: env(safe-area-inset-top, 28px);
+    overflow: hidden; /* Ensure flex children control their own scrolling */
 }
 
-header {
+.app-container header {
     padding: var(--header-padding);
     border-bottom: 1px solid hsl(var(--border));
     display: flex;
@@ -523,56 +92,106 @@ header h1 {
     color: hsl(var(--foreground));
 }
 
-.logo-area {
+.app-container .logo-area {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.logo-area img {
+.app-container .logo-area img {
     width: 24px;
     height: 24px;
 }
 
-/* Tabs - EXACT copy from extension */
+/* Tabs - Modern Bottom Navbar */
 .tabs-nav {
-    display: inline-flex;
-    height: 2.75rem;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius);
-    background-color: hsl(var(--muted));
-    padding: 0.25rem;
-    margin: var(--tabs-margin);
-    width: calc(100% - 2.5rem);
+    display: none; /* We use .bottom-tabs which overrides or replaces this */
+}
+
+/* Bottom Navbar Styles */
+.bottom-tabs {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: calc(4.5rem + env(safe-area-inset-bottom));
+  display: flex !important;
+  align-items: center;
+  justify-content: space-around;
+  background-color: hsla(var(--background), 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid hsl(var(--border));
+  padding-bottom: env(safe-area-inset-bottom);
+  margin: 0;
+  z-index: 100;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Adjust main content to not be covered by fixed navbar */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--container-padding);
+  padding-bottom: 6rem; /* Space for navbar */
 }
 
 .tab-trigger {
-    display: inline-flex;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 0.4rem;
     white-space: nowrap;
-    border-radius: calc(var(--radius) - 2px);
-    padding: 0.45rem 1rem;
-    font-size: 0.875rem;
+    padding: 0.25rem;
+    font-size: 0.75rem;
     font-weight: 500;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     border: none;
     background: transparent;
     color: hsl(var(--muted-foreground));
     flex: 1;
     font-family: inherit;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.tab-trigger:hover {
-    color: hsl(var(--foreground));
+.tab-trigger svg,
+.tab-trigger i {
+    width: 22px;
+    height: 22px;
+    padding: 2px;
+    border-radius: 1.25rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .tab-trigger.active {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    color: hsl(var(--quran-green));
+    font-weight: 700;
+}
+
+.tab-trigger.active svg,
+.tab-trigger.active i {
+    background-color: hsla(var(--quran-green), 0.15);
+    color: hsl(var(--quran-green));
+    stroke: hsl(var(--quran-green));
+    padding: 4px 12px;
+    width: 48px; /* Pill width */
+    height: 28px;
+    font-size: 1.1rem;
+}
+
+.tab-trigger span {
+    transition: transform 0.2s ease;
+}
+
+.tab-trigger.active span {
+    transform: scale(1.05);
 }
 
 .content {
@@ -1422,4 +1041,34 @@ header h1 {
     .download-btn {
         width: 200px;
     }
+}
+
+
+.lang-switcher {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.lang-btn {
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: hsl(var(--muted-foreground));
+  transition: all 0.2s;
+}
+
+.lang-btn:hover {
+  border-color: hsl(var(--quran-green));
+  color: hsl(var(--foreground));
+}
+
+.lang-btn.active {
+  background-color: hsl(var(--quran-green));
+  border-color: hsl(var(--quran-green));
+  color: white;
 }

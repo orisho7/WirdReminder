@@ -1,9 +1,13 @@
-import { fetchAllSurahs, fetchSurahVerses, fetchAyahRange, fetchJuzVerses, getSurahName } from './core/js/api.js';
+import { fetchAllSurahs, fetchSurahVerses, fetchAyahRange, fetchJuzVerses, fetchPageVerses, getSurahName } from './core/js/api.js';
 import { storage } from './core/js/adapter/storage.js';
-import { parseVersesToPages } from './core/js/parser.js';
+import { parseVersesToPages, buildFullLineInfo, getPartialLineType } from './core/js/parser.js';
 import * as reminderLogic from './core/js/logic/reminders.js';
 import { env } from './core/js/adapter/env.js';
 import { notificationManager } from './core/js/adapter/notifications.js';
+import { createI18n } from './core/i18n/i18n.js';
+import { themeManager } from './core/js/theme.js';
+
+const i18n = createI18n();
 
 // Logic Delegates
 const addReminder = reminderLogic.addReminder;
@@ -62,6 +66,14 @@ const appContainer = document.getElementById('app-container');
 // INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize theme toggle
+    const themeToggleContainer = document.getElementById('theme-toggle-container');
+    if (themeToggleContainer) {
+        const toggleButton = themeManager.createToggleButton();
+        themeToggleContainer.appendChild(toggleButton);
+    }
+    
+    await i18n.init();
     await checkAppVersionUpdate();
     initTabs();
     await loadPresets();
@@ -274,7 +286,7 @@ function renderActiveList(reminders, history, bookmarks) {
         myRemindersList.innerHTML = `
             <div class="empty-state">
                 <div class="empty-state-icon">📖</div>
-                <p class="empty-state-text">لا توجد تذكيرات نشطة حالياً.</p>
+                <p class="empty-state-text" data-i18n="demo.card.emptyState">${i18n.t('demo.card.emptyState')}</p>
             </div>`;
         return;
     }
@@ -326,59 +338,119 @@ function createReminderCard(reminder, lastReadTs, isActive, hasBookmark = false)
     const div = document.createElement('div');
     div.className = 'reminder-card';
 
-    const freqLabel = reminder.timing ? getFrequencyLabel(reminder.timing) : 'مسبق الضبط';
-    const timeLabel = reminder.timing ? `${reminder.timing.time} - ${freqLabel}` : 'غير محدد';
-
-    const bookmarkBadge = hasBookmark ? '<span style="margin-right:0.5rem; font-size:1rem;" title="لديك علامة محفوظة">🔖</span>' : '';
-
+    const freqLabel = reminder.timing ? getFrequencyLabel(reminder.timing) : i18n.t('frequency.preset');
+    const timeLabel = reminder.timing ? `${reminder.timing.time} - ${freqLabel}` : i18n.t('card.notScheduled');
     const isRead = isReadInCurrentPeriod(reminder, lastReadTs);
-    const checkboxLabel = isRead ? 'مقروء' : 'غير مقروء';
 
-    const checkboxHtml = isActive ? `
-            <div class="checkbox-wrapper mark-read-checkbox" data-id="${reminder.id}">
-                <button class="checkbox" role="checkbox" aria-checked="${isRead}">
-                    <span class="checkbox-indicator">✓</span>
-                </button>
-                <span class="checkbox-label">${checkboxLabel}</span>
-            </div>` : '';
+    // Card Header
+    const cardHeader = document.createElement('div');
+    cardHeader.className = 'card-header';
 
-    div.innerHTML = `
-        <div class="card-header">
-            <div>
-                <div class="card-title">${bookmarkBadge}${reminder.name || reminder.description}</div>
-                <div class="card-description">${timeLabel}</div>
-            </div>
-            <div class="card-header-actions">
-                <button class="btn btn-ghost calendar-btn" title="سجل الإنجاز">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
-                </button>
-                <button class="switch" role="switch" aria-checked="${isActive && reminder.enabled !== false}" data-id="${reminder.id}">
-                    <span class="switch-thumb"></span>
-                </button>
-            </div>
-        </div>
-        <div class="card-actions">
-            <div class="btn-group">
-                <button class="btn btn-primary read-btn">اقرأ</button>
-                <button class="btn btn-outline edit-btn" ${!isActive ? 'style="display:none"' : ''}>تعديل</button>
-            </div>
-            ${checkboxHtml}
-            <button class="btn btn-ghost btn-destructive delete-btn" ${!isActive ? 'style="display:none"' : ''}>حذف</button>
-        </div>
-    `;
+    const headerLeft = document.createElement('div');
+    
+    const cardTitle = document.createElement('div');
+    cardTitle.className = 'card-title';
+    if (hasBookmark) {
+        const bookmarkSpan = document.createElement('span');
+        bookmarkSpan.style.marginRight = '0.5rem';
+        bookmarkSpan.style.fontSize = '1rem';
+        bookmarkSpan.title = i18n.t('card.bookmarkTitle');
+        bookmarkSpan.textContent = '🔖';
+        cardTitle.appendChild(bookmarkSpan);
+    }
+    cardTitle.appendChild(document.createTextNode(reminder.name || reminder.description));
+
+    const cardDesc = document.createElement('div');
+    cardDesc.className = 'card-description';
+    cardDesc.textContent = timeLabel;
+
+    headerLeft.appendChild(cardTitle);
+    headerLeft.appendChild(cardDesc);
+
+    const headerActions = document.createElement('div');
+    headerActions.className = 'card-header-actions';
+
+    const calendarBtn = document.createElement('button');
+    calendarBtn.className = 'btn btn-ghost calendar-btn';
+    calendarBtn.title = i18n.t('card.progressHistory');
+    calendarBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`;
+
+    const switchBtn = document.createElement('button');
+    switchBtn.className = 'switch';
+    switchBtn.role = 'switch';
+    switchBtn.setAttribute('aria-checked', isActive && reminder.enabled !== false);
+    switchBtn.dataset.id = reminder.id;
+    const switchThumb = document.createElement('span');
+    switchThumb.className = 'switch-thumb';
+    switchBtn.appendChild(switchThumb);
+
+    headerActions.appendChild(calendarBtn);
+    headerActions.appendChild(switchBtn);
+
+    cardHeader.appendChild(headerLeft);
+    cardHeader.appendChild(headerActions);
+
+    // Card Actions
+    const cardActions = document.createElement('div');
+    cardActions.className = 'card-actions';
+
+    const btnGroup = document.createElement('div');
+    btnGroup.className = 'btn-group';
+
+    const readBtn = document.createElement('button');
+    readBtn.className = 'btn btn-primary read-btn';
+    readBtn.textContent = i18n.t('card.readBtn');
+
+    const editBtn = document.createElement('button');
+    editBtn.className = 'btn btn-outline edit-btn';
+    editBtn.textContent = i18n.t('card.edit');
+    if (!isActive) editBtn.style.display = 'none';
+
+    btnGroup.appendChild(readBtn);
+    btnGroup.appendChild(editBtn);
+
+    cardActions.appendChild(btnGroup);
+
+    if (isActive) {
+        const checkboxWrapper = document.createElement('div');
+        checkboxWrapper.className = 'checkbox-wrapper mark-read-checkbox';
+        checkboxWrapper.dataset.id = reminder.id;
+
+        const checkbox = document.createElement('button');
+        checkbox.className = 'checkbox';
+        checkbox.role = 'checkbox';
+        checkbox.setAttribute('aria-checked', isRead);
+
+        const checkboxIndicator = document.createElement('span');
+        checkboxIndicator.className = 'checkbox-indicator';
+        checkboxIndicator.textContent = '✓';
+        checkbox.appendChild(checkboxIndicator);
+
+        const checkboxLabel = document.createElement('span');
+        checkboxLabel.className = 'checkbox-label';
+        checkboxLabel.textContent = isRead ? i18n.t('card.read') : i18n.t('card.unread');
+
+        checkboxWrapper.appendChild(checkbox);
+        checkboxWrapper.appendChild(checkboxLabel);
+        cardActions.appendChild(checkboxWrapper);
+    }
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'btn btn-ghost btn-destructive delete-btn';
+    deleteBtn.textContent = i18n.t('card.delete');
+    if (!isActive) deleteBtn.style.display = 'none';
+
+    cardActions.appendChild(deleteBtn);
+
+    div.appendChild(cardHeader);
+    div.appendChild(cardActions);
 
     // Calendar Button
-    div.querySelector('.calendar-btn').addEventListener('click', () => {
+    calendarBtn.addEventListener('click', () => {
         showCalendarModal(reminder);
     });
 
     // Toggle Switch
-    const switchBtn = div.querySelector('.switch');
     switchBtn.addEventListener('click', async () => {
         const currentlyChecked = switchBtn.getAttribute('aria-checked') === 'true';
         const newVal = !currentlyChecked;
@@ -400,7 +472,7 @@ function createReminderCard(reminder, lastReadTs, isActive, hasBookmark = false)
     });
 
     // Read Button
-    div.querySelector('.read-btn').addEventListener('click', () => {
+    readBtn.addEventListener('click', () => {
         openReader(reminder);
     });
 
@@ -422,17 +494,15 @@ function createReminderCard(reminder, lastReadTs, isActive, hasBookmark = false)
     }
 
     // Edit Button
-    const editBtn = div.querySelector('.edit-btn');
-    if (editBtn) {
+    if (isActive) {
         editBtn.addEventListener('click', () => {
             startEditing(reminder);
         });
     }
 
     // Delete Button
-    const delBtn = div.querySelector('.delete-btn');
-    if (delBtn) {
-        delBtn.addEventListener('click', () => {
+    if (isActive) {
+        deleteBtn.addEventListener('click', () => {
             showDeleteModal(reminder.id);
         });
     }
@@ -466,7 +536,20 @@ async function openReader(reminder) {
         }
 
         const pages = parseVersesToPages(verses);
-        renderReaderContent(pages);
+
+        // For ayah_range, fetch full page context to detect partial lines
+        let fullLineInfoMap = null; // Map<pageNumber, Map<lineNumber, info>>
+        if (reminder.type === 'ayah_range') {
+            fullLineInfoMap = new Map();
+            const pageNumbers = [...new Set(pages.map(p => p.pageNumber))];
+            const fullPagePromises = pageNumbers.map(async (pn) => {
+                const fullVerses = await fetchPageVerses(pn);
+                fullLineInfoMap.set(pn, buildFullLineInfo(fullVerses));
+            });
+            await Promise.all(fullPagePromises);
+        }
+
+        renderReaderContent(pages, fullLineInfoMap);
         restoreBookmark();
 
     } catch (e) {
@@ -519,7 +602,7 @@ async function updateMarkReadButton(reminder, btn) {
     }
 }
 
-function renderReaderContent(pagesData) {
+function renderReaderContent(pagesData, fullLineInfoMap) {
     readerContent.innerHTML = '';
 
     pagesData.forEach(pageData => {
@@ -528,16 +611,64 @@ function renderReaderContent(pagesData) {
         pageDiv.className = 'mushaf-page';
         pageDiv.dataset.page = pageNumber;
 
+        // Get full line info for this page (null for full surahs/juz)
+        const pageFullInfo = fullLineInfoMap ? fullLineInfoMap.get(pageNumber) : null;
+
         for (let i = 1; i <= 15; i++) {
             const lineWords = lines.get(i);
 
             if (lineWords) {
-                const isLast = i === 15 || !lines.has(i + 1);
-                const isCentered = isLast && lineWords.length < 5;
+                // Determine line type: full or partial
+                let lineClass = 'mushaf-line';
+                let partialType = 'full';
+
+                if (pageFullInfo) {
+                    const fullInfo = pageFullInfo.get(i);
+                    partialType = getPartialLineType(lineWords, fullInfo);
+                    if (partialType !== 'full') {
+                        lineClass += ` ${partialType}`;
+                        if (lineWords.length <= 1) {
+                            lineClass += ' single-word';
+                        }
+                    }
+                } else {
+                    // No full info = full surah/juz, use old heuristic for last line only
+                    const isLast = i === 15 || !lines.has(i + 1);
+                    if (isLast && lineWords.length < 5) {
+                        lineClass += ' centered';
+                    }
+                }
 
                 const lineDiv = document.createElement('div');
-                lineDiv.className = isCentered ? 'mushaf-line centered' : 'mushaf-line';
+                lineDiv.className = lineClass;
 
+                // For partial lines, calculate and apply dynamic padding
+                // to simulate the gap where missing words would be on the Mushaf page
+                if (partialType !== 'full' && pageFullInfo) {
+                    const fullInfo = pageFullInfo.get(i);
+                    if (fullInfo && fullInfo.totalWords > 0) {
+                        // Find first and last word positions in this wird's line
+                        let wirdFirstPos = Infinity;
+                        let wirdLastPos = -1;
+                        lineWords.forEach(w => {
+                            wirdFirstPos = Math.min(wirdFirstPos, w.position);
+                            wirdLastPos = Math.max(wirdLastPos, w.position);
+                        });
+
+                        if (partialType === 'partial-start' || partialType === 'partial-both') {
+                            // Gap at start (right side in RTL)
+                            const startGap = (wirdFirstPos - fullInfo.firstPos) / fullInfo.totalWords;
+                            lineDiv.style.paddingRight = `${Math.round(startGap * 100)}%`;
+                        }
+                        if (partialType === 'partial-end' || partialType === 'partial-both') {
+                            // Gap at end (left side in RTL)
+                            const endGap = (fullInfo.lastPos - wirdLastPos) / fullInfo.totalWords;
+                            lineDiv.style.paddingLeft = `${Math.round(endGap * 100)}%`;
+                        }
+                    }
+                }
+
+                // Render words — flex layout, no text spacers needed
                 lineWords.forEach(word => {
                     const span = document.createElement('span');
                     span.textContent = word.text_qpc_hafs || word.text_uthmani;
@@ -599,6 +730,82 @@ function renderReaderContent(pagesData) {
         pageDiv.appendChild(footer);
 
         readerContent.appendChild(pageDiv);
+    });
+
+    // After all pages are in the DOM, reflow lines that overflow
+    requestAnimationFrame(() => {
+        reflowAllPages();
+    });
+}
+
+/**
+ * Reflows all mushaf pages: if any line overflows its container,
+ * move trailing words/symbols to the next line until nothing overflows.
+ * This adapts the standard 15-line Mushaf layout to any screen width.
+ */
+function reflowAllPages() {
+    const pages = readerContent.querySelectorAll('.mushaf-page');
+    pages.forEach(pageDiv => reflowPage(pageDiv));
+}
+
+function reflowPage(pageDiv) {
+    // Collect only .mushaf-line elements (skip surah-header, basmala, page-footer)
+    const allLines = Array.from(pageDiv.querySelectorAll('.mushaf-line'));
+    if (allLines.length === 0) return;
+
+    // Multiple passes — moving a word down may cause the next line to overflow too
+    let changed = true;
+    let safety = 0;
+    const maxPasses = 30;
+
+    while (changed && safety < maxPasses) {
+        changed = false;
+        safety++;
+
+        for (let i = 0; i < allLines.length; i++) {
+            const line = allLines[i];
+            if (line.children.length === 0) continue;
+
+            // Check if this line overflows
+            while (line.scrollWidth > line.clientWidth + 2 && line.children.length > 1) {
+                // Get or create the next line
+                let nextLine = allLines[i + 1];
+                if (!nextLine) {
+                    // Create a new line at the end
+                    nextLine = document.createElement('div');
+                    nextLine.className = 'mushaf-line';
+                    // Insert before page-footer
+                    const footer = pageDiv.querySelector('.page-footer');
+                    if (footer) {
+                        pageDiv.insertBefore(nextLine, footer);
+                    } else {
+                        pageDiv.appendChild(nextLine);
+                    }
+                    allLines.splice(i + 1, 0, nextLine);
+                }
+
+                // Move the last child of current line to the BEGINNING of next line
+                // (RTL: last child visually is the leftmost = last in DOM)
+                const lastChild = line.lastElementChild;
+                if (nextLine.firstChild) {
+                    nextLine.insertBefore(lastChild, nextLine.firstChild);
+                } else {
+                    nextLine.appendChild(lastChild);
+                }
+                changed = true;
+            }
+        }
+    }
+
+    // After reflow, update centering on the last mushaf-line
+    // (if it has few words, it should be centered)
+    const finalLines = Array.from(pageDiv.querySelectorAll('.mushaf-line'));
+    finalLines.forEach((line, idx) => {
+        const isLast = idx === finalLines.length - 1;
+        line.classList.remove('centered');
+        if (isLast && line.children.length < 5 && line.children.length > 0) {
+            line.classList.add('centered');
+        }
     });
 }
 
@@ -669,10 +876,9 @@ async function renderCalendar() {
     const year = currentCalendarMonth.getFullYear();
     const month = currentCalendarMonth.getMonth();
 
-    const months = [
-        'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-        'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
-    ];
+    const months = i18n.getLanguage() === 'ar' 
+        ? ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
+        : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     document.getElementById('calendar-title').textContent = `${months[month]} ${year}`;
 
     const completedDates = new Set();
@@ -762,7 +968,7 @@ function getScheduledDaysInMonth(timing, year, month) {
 // MODALS
 // ============================================
 function showAlert(title, message) {
-    alertTitle.textContent = title || 'تنبيه';
+    alertTitle.textContent = title || i18n.t('alert.title') || 'تنبيه';
     alertMessage.textContent = message;
     alertModal.style.display = 'flex';
 
@@ -814,15 +1020,15 @@ function populateTargetSelect() {
     targetSelect.innerHTML = '';
 
     if (type === 'juz') {
-        targetSelect.innerHTML = '<option value="" disabled selected>اختر الجزء</option>';
+        targetSelect.innerHTML = `<option value="" disabled selected>${i18n.t('form.selectJuz')}</option>`;
         for (let i = 1; i <= 30; i++) {
             const option = document.createElement('option');
             option.value = i;
-            option.textContent = `الجزء ${i}`;
+            option.textContent = i18n.getLanguage() === 'ar' ? `الجزء ${i}` : `Juz ${i}`;
             targetSelect.appendChild(option);
         }
     } else {
-        targetSelect.innerHTML = '<option value="" disabled selected>اختر السورة</option>';
+        targetSelect.innerHTML = `<option value="" disabled selected>${i18n.t('form.selectSurah')}</option>`;
         allSurahs.forEach(surah => {
             const option = document.createElement('option');
             option.value = surah.id;

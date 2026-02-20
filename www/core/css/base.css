@@ -34,6 +34,57 @@
     --input-gap: 1rem;
     --header-padding: 1rem 1.25rem;
     --tabs-margin: 1rem 1.25rem 0.5rem;
+
+    /* Shadows (token-first) */
+    --shadow-sm: 0 1px 2px hsl(var(--foreground) / 0.06);
+    --shadow-md: 0 10px 20px hsl(var(--foreground) / 0.12);
+    --shadow-lg: 0 20px 25px hsl(var(--foreground) / 0.12), 0 10px 10px hsl(var(--foreground) / 0.06);
+
+    /* Overlay (modal) */
+    --overlay: 222.2 84% 4.9%;
+
+    /* Motion */
+    --dur-fast: 150ms;
+    --dur: 200ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Spacing tiny (calendar gap) */
+    --space-1: 0.25rem; /* 4px */
+    --space-2: 0.5rem;  /* 8px */
+
+    --space-3: 0.75rem; /* 12px */
+    --space-4: 1rem;    /* 16px */
+    --space-5: 1.5rem;  /* 24px */
+
+}
+
+/* Dark Mode Variables */
+.dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 221.2 83.2% 53.3%;
+    
+    /* Semantic Colors - Dark Mode */
+    --quran-green: 142.1 70.6% 45.3%;
+    
+    /* Overlay (modal) */
+    --overlay: 210 40% 98%;
 }
 
 * {
@@ -50,4 +101,44 @@ body {
     height: 600px;
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar Styling */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(215 16% 47%) hsl(var(--background));
+}
+
+/* Webkit Scrollbar (Chrome, Safari, Edge) */
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: hsl(210 40% 96%);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: hsl(215 16% 47%);
+    border-radius: 4px;
+    border: 2px solid hsl(210 40% 96%);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(215 16% 35%);
+}
+
+/* Dark Mode Scrollbar */
+.dark *::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+}
+
+.dark *::-webkit-scrollbar-thumb {
+    background-color: hsl(217.2 32.6% 25%);
+    border: 2px solid hsl(var(--background));
+}
+
+.dark *::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(217.2 32.6% 35%);
 }

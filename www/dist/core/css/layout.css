@@ -1,0 +1,88 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+header {
+  padding: var(--header-padding);
+  border-bottom: 1px solid hsl(var(--border));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+header .logo-area {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+header h1 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: hsl(var(--foreground));
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--container-padding);
+}
+
+/* Tabs - Token-first */
+.tabs-nav {
+  display: inline-flex;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  background-color: hsl(var(--muted));
+  padding: var(--space-1);
+  margin: var(--tabs-margin);
+  width: calc(100% - (var(--container-padding) * 2));
+}
+
+.tab-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: calc(var(--radius) - 2px);
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: hsl(var(--muted-foreground));
+  flex: 1;
+
+  transition:
+    background-color var(--dur),
+    color var(--dur),
+    box-shadow var(--dur),
+    transform var(--dur-fast);
+}
+
+.tab-trigger:hover {
+  color: hsl(var(--foreground));
+}
+
+.tab-trigger.active {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  box-shadow: var(--shadow-sm);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
