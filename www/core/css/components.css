@@ -549,6 +549,15 @@
     background-color: hsl(var(--muted-foreground) / 0.4);
 }
 
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 /* -------------------------------------------------------------------------------------- */
 .reflection-card {
     transition: transform 0.2s ease, border-color 0.2s ease;
@@ -575,6 +584,7 @@
 }
 
 .search-area {
-     margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
+
 /* -------------------------------------------------------------------------------------- */

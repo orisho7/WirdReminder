@@ -26,18 +26,38 @@ header h1 {
     padding: var(--container-padding);
 }
 
-/* Tabs - Shadcn style */
-.tabs-nav {
-    display: flex;
-    height: 2.75rem;
+/* Tabs - Token-first */
+/* .tabs-nav { */
+/*     display: flex; */
+/*     height: 2.75rem; */
+/*     align-items: center; */
+/*     border-radius: var(--radius); */
+/*     background-color: hsl(var(--muted)); */
+/*     padding: 0.25rem; */
+/*     margin: var(--tabs-margin); */
+/*     width: calc(100% - 1.5rem); */
+/*     margin-left: auto; */
+/*     margin-right: auto; */
+/* } */
+
+.bottom-tabs {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: calc(4.5rem + env(safe-area-inset-bottom));
+    display: flex !important;
     align-items: center;
-    border-radius: var(--radius);
-    background-color: hsl(var(--muted));
-    padding: 0.25rem;
-    margin: var(--tabs-margin);
-    width: calc(100% - 1.5rem);
-    margin-left: auto;
-    margin-right: auto;
+    justify-content: space-around;
+    background-color: hsla(var(--background), 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid hsl(var(--border));
+    padding-bottom: env(safe-area-inset-bottom);
+    margin: 0;
+    z-index: 100;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .tab-trigger {
@@ -46,15 +66,20 @@ header h1 {
     justify-content: center;
     white-space: nowrap;
     border-radius: calc(var(--radius) - 2px);
-    padding: 0.45rem 0.25rem; 
-    font-size: 0.75rem;
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.875rem;
     font-weight: 500;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     border: none;
     background: transparent;
     color: hsl(var(--muted-foreground));
     flex: 1;
+
+    transition:
+        background-color var(--dur),
+        color var(--dur),
+        box-shadow var(--dur),
+        transform var(--dur-fast);
 }
 
 .tab-trigger:hover {
