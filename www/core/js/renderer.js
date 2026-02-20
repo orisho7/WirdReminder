@@ -124,12 +124,28 @@ export function createPageElement(pageData) {
 
             if (surahId) {
                 if (gap === 2) {
-                    pageDiv.appendChild(createSurahHeader(surahId));
+                    // Start collecting surah intro (header line)
+                    const introDiv = document.createElement('div');
+                    introDiv.className = 'surah-intro';
+                    introDiv.appendChild(createSurahHeader(surahId));
+                    // Check if next empty line is basmala
+                    const nextGap = findSurahGap(i + 1, lines, surahStarts);
+                    if (nextGap.surahId && nextGap.gap === 1 && nextGap.surahId !== '9') {
+                        introDiv.appendChild(createBasmala());
+                    }
+                    pageDiv.appendChild(introDiv);
                 } else if (gap === 1) {
-                    if (surahId !== '9') {
-                        pageDiv.appendChild(createBasmala());
-                    } else {
-                        pageDiv.appendChild(createEmptyLine());
+                    // Only add basmala if not already added by previous gap===2
+                    const prevGap = findSurahGap(i - 1, lines, surahStarts);
+                    if (!(prevGap.surahId && prevGap.gap === 2)) {
+                        if (surahId !== '9') {
+                            const introDiv = document.createElement('div');
+                            introDiv.className = 'surah-intro';
+                            introDiv.appendChild(createBasmala());
+                            pageDiv.appendChild(introDiv);
+                        } else {
+                            pageDiv.appendChild(createEmptyLine());
+                        }
                     }
                 }
             }

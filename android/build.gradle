@@ -25,12 +25,17 @@ allprojects {
 }
 
 subprojects {
-    afterEvaluate {
+    afterEvaluate { project ->
         if (project.hasProperty('android')) {
-            android {
+            project.android {
                 compileOptions {
-                    sourceCompatibility JavaVersion.VERSION_17
-                    targetCompatibility JavaVersion.VERSION_17
+                    sourceCompatibility JavaVersion.VERSION_21
+                    targetCompatibility JavaVersion.VERSION_21
+                }
+                if (project.plugins.hasPlugin('kotlin-android') || project.plugins.hasPlugin('org.jetbrains.kotlin.android')) {
+                    kotlinOptions {
+                        jvmTarget = '21'
+                    }
                 }
             }
         }

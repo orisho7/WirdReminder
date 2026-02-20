@@ -57,6 +57,32 @@ export const themeManager = {
             if (body) body.classList.remove(DARK_CLASS);
             console.log('Light theme applied');
         }
+
+        // Update native status bar style on Capacitor
+        this._updateSystemBars(theme);
+    },
+
+    /**
+     * Update native system bars (status bar) style for Capacitor
+     * In dark mode: white status bar background (via CSS) with dark icons
+     * In light mode: default status bar with light icons
+     * @param {string} theme - 'light' or 'dark'
+     */
+    async _updateSystemBars(theme) {
+        if (typeof window !== 'undefined' && window.Capacitor && window.Capacitor.isNativePlatform) {
+            try {
+                const { SystemBars } = await import('@capacitor/core');
+                if (SystemBars && SystemBars.setStyle) {
+                    // Dark mode → white status bar bg → need dark icons (Light style)
+                    // Light mode → colored/default bg → need light icons (Dark style)
+                    const style = theme === 'dark' ? 'LIGHT' : 'DARK';
+                    await SystemBars.setStyle({ style });
+                    console.log(`[Theme] SystemBars style set to ${style}`);
+                }
+            } catch (e) {
+                console.log('[Theme] SystemBars API not available:', e.message);
+            }
+        }
     },
 
     /**
