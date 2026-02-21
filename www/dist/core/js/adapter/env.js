@@ -27,5 +27,5 @@ export const env = {
     /**
      * Current Application Version (synced from package.json)
      */
-    version: '1.1.1'
+    version: '1.3.4'
 };

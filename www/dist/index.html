@@ -14,21 +14,34 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700&display=swap"
         rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <!-- Base Styles (React/Tailwind) are handled by main.tsx -->
     <!-- Legacy Styles (App only) -->
-    <link rel="stylesheet" href="./assets/styles-BNFqZ5pl.css" id="legacy-styles" disabled>
+    <link rel="stylesheet" href="./assets/styles-DELC1oQN.css" id="legacy-styles" disabled>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="core/assets/icons/icon48.png">
+    <link rel="icon" type="image/png" href="./assets/icon48-x2_x6IHH.png">
 
     <!-- PWA -->
-    <link rel="manifest" href="./assets/manifest-C4CiZenC.json">
+    <link rel="manifest" href="./assets/manifest-DAXes_Sp.json">
     <meta name="theme-color" content="#10b981">
-    <link rel="apple-touch-icon" href="core/assets/icons/icon128.png">
+    <link rel="apple-touch-icon" href="./assets/icon128-jlXxILU3.png">
 
     <style>
         /* Conditional Visibility */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body.is-app {
+            overflow: hidden;
+        }
+
         /* If we are in mobile/capacitor, we hide the React root */
         body.is-app #root {
             display: none !important;
@@ -45,8 +58,8 @@
             min-height: 100vh;
         }
     </style>
-  <script type="module" crossorigin src="./assets/index-D5U_WKp9.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BygfOpc_.css">
+  <script type="module" crossorigin src="./assets/index-Br451Dap.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CKswAgTE.css">
 </head>
 
 <body>
@@ -58,21 +71,13 @@
         <!-- Header -->
         <header>
             <div class="logo-area">
-                <img src="core/assets/icons/icon48.png" alt="Wird Logo">
+                <img src="data:image/png;base64,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" alt="Wird Logo">
                 <h1>مُذكِّر الوِرد اليومي</h1>
             </div>
             <div id="theme-toggle-container" class="theme-toggle-container"></div>
         </header>
 
-        <!-- Tabs -->
-        <div class="tabs-nav">
-            <button class="tab-trigger active" data-tab="reminders-tab">التذكيرات</button>
-            <button class="tab-trigger" data-tab="add-new">إضافة جديد</button>
-            <button class="tab-trigger" data-tab="settings-tab">الإعدادات</button>
-            <button class="tab-trigger" id="pwa-downloads-trigger" data-tab="downloads-tab"
-                style="display: none;">التحميل</button>
-        </div>
-
+    
         <!-- Content -->
         <main class="content">
             <!-- Tab: Reminders -->
@@ -227,6 +232,27 @@
                 </div>
             </section>
         </main>
+        <!-- Bottom Navigation Bar -->
+           <div class="tabs-nav bottom-tabs">
+            <button class="tab-trigger active" data-tab="reminders-tab">
+                <i class="bi bi-card-checklist"></i>
+                <span>التذكيرات</span>
+            </button>
+            <button class="tab-trigger" data-tab="add-new">
+                <i id="add-new-icon" class="bi bi-plus-circle"></i>
+                <i id="edit-new-icon" class="bi bi-pencil-square" style="display: none;"></i>
+                <span id="add-new-btn">إضافة</span>
+            </button>
+            <button class="tab-trigger" data-tab="settings-tab">
+                <i class="bi bi-gear-wide-connected"></i>
+                <span>الإعدادات</span>
+            </button>
+            <button class="tab-trigger" id="pwa-downloads-trigger" data-tab="downloads-tab" style="display: none;">
+                <i class="bi bi-cloud-arrow-down"></i>
+                <span>التحميل</span>
+            </button>
+        </div>
+
     </div>
 
     <!-- Reader View (Hidden by default) -->
@@ -238,9 +264,7 @@
         <div class="reader-content" id="reader-content">
             <!-- Verses rendered here -->
         </div>
-        <div class="reader-footer">
-            <button class="btn btn-primary btn-xl" id="mark-read-btn">✓ تحديد كمقروء</button>
-        </div>
+        <button class="mark-read-fab" id="mark-read-btn">✓ تحديد كمقروء</button>
     </div>
 
     <!-- Calendar Modal -->

@@ -1,16 +1,16 @@
 /* Card - Shadcn style */
 .reminder-card {
-  border-radius: var(--radius);
-  border: 1px solid hsl(var(--border));
-  background-color: hsl(var(--card));
-  color: hsl(var(--card-foreground));
-  box-shadow: var(--shadow-sm);
-  padding: var(--card-padding);
-  margin-bottom: var(--card-gap);
-  display: flex;
-  flex-direction: column;
-  gap: var(--card-gap);
-  animation: slideUp 0.3s ease-out;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    background-color: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    padding: var(--card-padding);
+    margin-bottom: var(--card-gap);
+    display: flex;
+    flex-direction: column;
+    gap: var(--card-gap);
+    animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
@@ -40,7 +40,7 @@
 .card-description {
     font-size: 0.8rem;
     color: hsl(var(--muted-foreground));
-    margin-top: var(--space-1);
+    margin-top: 0.25rem;
 }
 
 /* Actions Area */
@@ -48,34 +48,29 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: var(--space-2);
+    padding-top: 0.5rem;
     border-top: 1px solid hsl(var(--border));
 }
 
 .btn-group {
     display: flex;
-    gap: var(--space-2);
+    gap: 0.5rem;
 }
 
 /* Buttons - Shadcn base */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius);
-  font-size: 0.75rem;
-  font-weight: 500;
-  height: 2rem;
-  padding: 0 0.75rem;
-  cursor: pointer;
-  transition: background-color var(--dur), color var(--dur), border-color var(--dur), box-shadow var(--dur), transform var(--dur-fast);
-  border: 1px solid transparent;
-  font-family: inherit;
-}
-
-.btn:focus-visible {
-  outline: 2px solid hsl(var(--ring));
-  outline-offset: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+    font-size: 0.75rem;
+    font-weight: 500;
+    height: 2rem;
+    padding: 0 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border: 1px solid transparent;
+    font-family: inherit;
 }
 
 .btn-primary {
@@ -133,7 +128,7 @@
     align-items: center;
     border-radius: 9999px;
     border: 2px solid transparent;
-    transition: background-color var(--dur);
+    transition: background-color 0.2s;
     background-color: hsl(var(--input));
 }
 
@@ -142,14 +137,14 @@
 }
 
 .switch-thumb {
-  display: block;
-  height: 1rem;
-  width: 1rem;
-  border-radius: 9999px;
-  background-color: hsl(var(--background));
-  box-shadow: var(--shadow-sm); /* ✅ */
-  transition: transform var(--dur);
-  transform: translateX(0);
+    display: block;
+    height: 1rem;
+    width: 1rem;
+    border-radius: 9999px;
+    background-color: hsl(var(--background));
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+    transform: translateX(0);
 }
 
 .switch[aria-checked="true"] .switch-thumb {
@@ -162,16 +157,16 @@
 
 /* Modal Overlay */
 .modal-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 50;
-  background-color: hsl(var(--overlay) / 0.4);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--container-padding);
-  animation: fadeIn var(--dur) ease-out;
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--container-padding);
+    animation: fadeIn 0.2s ease-out;
 }
 
 @keyframes fadeIn {
@@ -185,21 +180,15 @@
 }
 
 .modal-content {
-  background-color: hsl(var(--background));
-  border: 1px solid hsl(var(--border));
-  border-radius: var(--radius);
-  padding: var(--space-5);
-  width: 100%;
-  max-width: 320px;
-  box-shadow: var(--shadow-lg);
-  animation: slideInUp 0.3s var(--ease-out);
+    background-color: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 320px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: slideInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-.input:focus-visible {
-  border-color: hsl(var(--ring));
-  box-shadow: 0 0 0 2px hsl(var(--ring) / 0.15);
-}
-
 
 .modal-title {
     font-size: 1rem;
@@ -210,13 +199,13 @@
 .modal-description {
     font-size: 0.875rem;
     color: hsl(var(--muted-foreground));
-    margin-bottom: var(--space-5);
+    margin-bottom: 1.5rem;
 }
 
 .modal-footer {
     display: flex;
     justify-content: flex-end;
-    gap: var(--space-2);
+    gap: 0.5rem;
 }
 
 @keyframes slideInUp {
@@ -240,7 +229,7 @@
     display: block;
     font-size: 0.875rem;
     font-weight: 500;
-    margin-bottom: var(--space-1);
+    margin-bottom: 0.375rem;
 }
 
 .input {
@@ -248,11 +237,16 @@
     border-radius: var(--radius);
     border: 1px solid hsl(var(--input));
     background-color: hsl(var(--background));
-    padding: var(--space-2) var(--space-3);
+    padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     font-family: inherit;
     outline: none;
     transition: border-color 0.2s;
+}
+
+.input:focus {
+    border-color: hsl(var(--ring));
+    box-shadow: 0 0 0 2px hsl(var(--ring) / 0.1);
 }
 
 .submit-area {
@@ -299,7 +293,7 @@
 .checkbox-wrapper {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: 0.5rem;
     cursor: pointer;
     user-select: none;
 }
@@ -372,7 +366,7 @@
 .card-header-actions {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: 0.5rem;
 }
 
 .calendar-btn {
@@ -432,9 +426,9 @@
 }
 
 .calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: var(--space-1);
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
 }
 
 .calendar-cell {
@@ -556,10 +550,41 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 1ms !important;
-    scroll-behavior: auto !important;
-  }
+    * {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+    }
 }
+
+/* -------------------------------------------------------------------------------------- */
+.reflection-card {
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.reflection-card:hover {
+    border-color: hsl(var(--quran-green) / 0.4);
+    transform: translateY(-2px);
+}
+
+.reflection-body {
+    padding: 0.25rem 0;
+}
+
+.reflection-text {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: hsl(var(--foreground));
+    white-space: pre-wrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.search-area {
+    margin-bottom: 1rem;
+}
+
+/* -------------------------------------------------------------------------------------- */

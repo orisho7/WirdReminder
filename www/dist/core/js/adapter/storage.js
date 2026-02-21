@@ -104,3 +104,85 @@ export const storage = {
         }
     }
 };
+
+
+/**
+ * Handles persistence of reflections in storage.
+ * Provides CRUD operations for managing reflection data.
+ */
+const REFLECTIONS_KEY = 'quran_reflections';
+
+export const ReflectionStorage = {
+
+    /**
+     * Retrieves all stored reflections.
+     *
+     * @returns {Promise<Reflection[]>} Array of reflections (empty if none exist)
+     */
+    async getAll() {
+        const data = await storage.get(REFLECTIONS_KEY);
+        return data || [];
+    },
+
+    /**
+     * Retrieves a reflection by specific surah and ayah.
+     *
+     * @param {string|number} surah - Surah number
+     * @param {string|number} ayah - Ayah number
+     * @returns {Promise<Reflection|undefined>} Matching reflection or undefined
+     */
+    async getByAyah(surah, ayah) {
+        const all = await this.getAll();
+        return all.find(r => r.surah === parseInt(surah) && r.ayah === parseInt(ayah));
+    },
+
+    /**
+     * Saves a reflection.
+     * 
+     * If a reflection for the same surah and ayah exists,
+     * it will be updated. Otherwise, a new reflection will be created.
+     *
+     * @param {Partial<Reflection>} reflection - Reflection data to save
+     * @returns {Promise<Reflection[]>} Updated reflections array
+     */
+    async save(reflection) {
+        const all = await this.getAll();
+        const s = parseInt(reflection.surah);
+        const a = parseInt(reflection.ayah);
+        const index = all.findIndex(r => r.surah === s && r.ayah === a);
+
+        if (index > -1) {
+            all[index] = {
+                ...all[index],
+                text: reflection.text,
+                updatedAt: new Date().toISOString()
+            };
+        } else {
+            all.push({
+                id: `ref_${Date.now()}_${s}_${a}`,
+                surah: s,
+                ayah: a,
+                text: reflection.text,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            });
+        }
+
+        await storage.set({ [REFLECTIONS_KEY]: all });
+        return all;
+    },
+
+    /**
+     * Deletes a reflection by surah and ayah.
+     *
+     * @param {string|number} surah - Surah number
+     * @param {string|number} ayah - Ayah number
+     * @returns {Promise<Reflection[]>} Updated reflections array after deletion
+     */
+    async delete(surah, ayah) {
+        const all = await this.getAll();
+        const filtered = all.filter(r => !(r.surah === parseInt(surah) && r.ayah === parseInt(ayah)));
+        await storage.set({ [REFLECTIONS_KEY]: filtered });
+        return filtered;
+    }
+};

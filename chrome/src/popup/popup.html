@@ -25,12 +25,24 @@
             <div id="theme-toggle-container" class="theme-toggle-container"></div>
         </header>
 
-        <!-- Tabs -->
-        <div class="tabs-nav">
-            <button class="tab-trigger active" data-tab="reminders-tab">التذكيرات</button>
-            <button class="tab-trigger" data-tab="add-new">إضافة جديد</button>
-            <button class="tab-trigger" data-tab="reflections-tab">سجل التدبر</button>
-            <button class="tab-trigger" data-tab="settings-tab">الإعدادات</button>
+             <div class="tabs-nav">
+            <button class="tab-trigger active" data-tab="reminders-tab">
+                <i class="bi bi-card-checklist"></i>
+                <span>التذكيرات</span>
+            </button>
+            <button class="tab-trigger" data-tab="add-new">
+                <i id="add-new-icon" class="bi bi-plus-circle"></i>
+                <i id="edit-new-icon" class="bi bi-pencil-square" style="display: none;"></i>
+                <span id="add-new-btn">إضافة</span>
+            </button>
+            <button class="tab-trigger" data-tab="settings-tab">
+                <i class="bi bi-gear-wide-connected"></i>
+                <span>الإعدادات</span>
+            </button>
+            <button class="tab-trigger" id="pwa-downloads-trigger" data-tab="downloads-tab" style="display: none;">
+                <i class="bi bi-cloud-arrow-down"></i>
+                <span>التحميل</span>
+            </button>
         </div>
 
         <!-- Content -->

@@ -1,88 +1,104 @@
 .app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
 }
 
 header {
-  padding: var(--header-padding);
-  border-bottom: 1px solid hsl(var(--border));
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-header .logo-area {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  flex: 1;
+    padding: var(--header-padding);
+    border-bottom: 1px solid hsl(var(--border));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 header h1 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  color: hsl(var(--foreground));
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: hsl(var(--foreground));
 }
 
 .content {
-  flex: 1;
-  overflow-y: auto;
-  padding: var(--container-padding);
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--container-padding);
 }
 
-/* Tabs - Token-first */
+/* Tabs - Inline pill style (extension popup) */
 .tabs-nav {
-  display: inline-flex;
-  height: 2.75rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius);
-  background-color: hsl(var(--muted));
-  padding: var(--space-1);
-  margin: var(--tabs-margin);
-  width: calc(100% - (var(--container-padding) * 2));
+    display: flex;
+    height: 2.75rem;
+    align-items: center;
+    border-radius: var(--radius);
+    background-color: hsl(var(--muted));
+    padding: var(--space-1);
+    margin: var(--tabs-margin);
+    width: calc(100% - (var(--container-padding) * 2));
+    flex-shrink: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bottom-tabs {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: calc(4.5rem + env(safe-area-inset-bottom));
+    display: flex !important;
+    align-items: center;
+    justify-content: space-around;
+    background-color: hsla(var(--background), 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid hsl(var(--border));
+    padding-bottom: env(safe-area-inset-bottom);
+    margin: 0;
+    z-index: 100;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .tab-trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  border-radius: calc(var(--radius) - 2px);
-  padding: var(--space-2) var(--space-4);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  color: hsl(var(--muted-foreground));
-  flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border-radius: calc(var(--radius) - 2px);
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: hsl(var(--muted-foreground));
+    flex: 1;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
 
-  transition:
-    background-color var(--dur),
-    color var(--dur),
-    box-shadow var(--dur),
-    transform var(--dur-fast);
+    transition:
+        background-color var(--dur),
+        color var(--dur),
+        box-shadow var(--dur),
+        transform var(--dur-fast);
 }
 
 .tab-trigger:hover {
-  color: hsl(var(--foreground));
+    color: hsl(var(--foreground));
 }
 
 .tab-trigger.active {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  box-shadow: var(--shadow-sm);
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
 .tab-content {
-  display: none;
+    display: none;
 }
 
 .tab-content.active {
-  display: block;
+    display: block;
 }
